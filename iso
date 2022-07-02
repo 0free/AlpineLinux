@@ -1,0 +1,91 @@
+#!/bin/bash
+
+clear && cd ~
+
+sudo apk update
+sudo apk upgrade
+sudo apk add build-base busybox fakeroot syslinux xorriso squashfs-tools git
+sudo apk add alpine-sdk apk-tools alpine-conf
+sudo apk add mtools dosfstools grub-efi
+
+if [[ ! -d ~/.abuild ]]; then
+   echo -en '\n' | abuild-keygen -i -a
+fi
+
+if [[ ! -d ~/aports ]]; then
+   git clone https://gitlab.alpinelinux.org/alpine/aports.git
+else
+   cd ~/aports
+   git pull
+   cd ~
+fi
+
+cat << EOF > ~/aports/scripts/mkimg.iso.sh
+
+profile_iso() {
+
+   #source ~/aports/scripts/mkimg.base.sh
+   profile_standard
+   arch="x86_64"
+   image_ext="iso"
+   output_format="iso"
+   hostname="alpine"
+
+   boot_addons="amd-ucode intel-ucode"
+
+   initrd_ucode="/boot/amd-ucode.img /boot/intel-ucode.img"
+   initfs_cmdline="modules=loop,squashfs,sd-mod,usb-storage quiet"
+   initfs_features="ata base bootchart ext4 mmc nvme raid scsi squashfs usb virtio"
+
+   kernel_flavors="edge"
+   kernel_addons="xtables-addons zfs"
+
+   kernel_cmdline="unionfs_size=512M console=tty0 console=ttyS0,115200"
+   syslinux_serial="0 115200"
+
+   grub_mod="all_video disk part_gpt part_msdos linux normal configfile search search_label efi_gop fat iso9660 cat echo ls test true help gzio"
+
+   apkovl="genapkovl-mkimgoverlay.sh"
+
+   apks="\$apks
+         alpine-base busybox kbd-bkeymaps chrony dhcpcd
+         haveged network-extras tzdata wget
+         openntpd openssl openssh
+         coreutils ethtool hwids doas
+         iwd wireless-tools wpa_supplicant
+         iscsi-scst cciss_vol_status lvm2 mdadm
+         mkinitfs util-linux
+         xtables-addons ca-certificates curl rsync nano
+         efibootmgr syslinux grub-bios grub-efi
+         e2fsprogs e2fsprogs-extra
+         mtools dosfstools nfs-utils ntfs-3g btrfs-progs xfsprogs f2fs-tools
+         zfs zfs-scripts zfs-utils-py
+         parted sfdisk sgdisk
+         "
+
+   local _k _a
+   for _k in \$kernel_flavors; do
+      apks="\$apks linux-\$_k"
+      for _a in \$kernel_addons; do
+         apks="\$apks \$_a-\$_k"
+      done
+   done
+   apks="\$apks linux-firmware"
+
+}
+EOF
+
+chmod +x ~/aports/scripts/mkimg.iso.sh
+
+if [[ ! -d ~/cache ]]; then
+   mkdir ~/cache
+fi
+
+if [[ -d /lib/apk/db ]]; then
+   sudo rm -rf /lib/apk/db
+   sudo mkdir /lib/apk/db
+fi
+
+sudo sh ~/aports/scripts/mkimage.sh --profile iso --tag edge --outdir ~/ --workdir ~/cache --arch x86_64 --hostkeys --simulate --repository https://dl-cdn.alpinelinux.org/alpine/edge/main --repository https://dl-cdn.alpinelinux.org/alpine/edge/community --repository https://dl-cdn.alpinelinux.org/alpine/edge/testing
+
+#end

@@ -2,57 +2,76 @@
 
 clear && cd ~
 
-if [[ -f /lib/apk/db/lock ]]; then
-   sudo rm /lib/apk/db/lock
-fi
-
 sudo apk cache
 sudo apk update
 sudo apk upgrade
-sudo apk add build-base busybox fakeroot syslinux xorriso squashfs-tools git
+sudo apk add build-base busybox fakeroot
+sudo apk add syslinux xorriso squashfs-tools git
 sudo apk add alpine-sdk apk-tools alpine-conf
-sudo apk add mtools dosfstools grub-efi
+sudo apk add mtools dosfstools grub grub-efi
 
 USER=$(whoami)
 
-sudo usermod -a -G abuild $USER
+if ! sudo groups | grep -q abuild; then
+   sudo addgroup abuild
+fi
+
+if ! sudo groups $USER | grep -q abuild; then
+   sudo usermod -a -G abuild $USER
+fi
 
 if [[ ! -d ./.abuild ]]; then
    echo -en '\n' | abuild-keygen -i -a
 fi
 
 if [[ ! -d ./aports ]]; then
-   git clone https://gitlab.alpinelinux.org/alpine/aports.git
+   git clone --single-branch -b master https://gitlab.alpinelinux.org/alpine/aports.git
 else
    cd ./aports
    git pull
    cd ..
 fi
 
-cat << EOF > ./aports/scripts/mkimg.iso.sh
-profile_iso() {
+cat << EOF > ./aports/scripts/mkimg.custom.sh
+profile_custom() {
 
-   arch="x86_64"
    output_format="iso"
    image_ext="iso"
+   arch="x86_64"
+	hostname="alpine"
 
-   profile_standard
+   kernel_flavors="edge"
+   kernel_addons=""
+
+	initfs_cmdline="modules=loop,squashfs,sd-mod,usb-storage quiet"
+
+	initfs_features="ata base bootchart nvme ext4 mmc raid scsi squashfs usb"
+
+	modloop_sign=yes
+
+	grub_mod="all_video disk part_gpt part_msdos linux normal configfile efi_gop fat"
 
    boot_addons="amd-ucode intel-ucode"
 
    initrd_ucode="/boot/amd-ucode.img /boot/intel-ucode.img"
 
+   apkovl="./aports/scripts/genapkovl-dhcp.sh"
+
    apks="\$apks
-         linux-lts linux-firmware
-         alpine-base busybox kbd-bkeymaps chrony dhcpcd
-         coreutils ethtool hwids doas
-         iwd wireless-tools wpa_supplicant
-         iscsi-scst cciss_vol_status lvm2 mdadm
-         mkinitfs util-linux
-         ca-certificates curl wget rsync nano
-         syslinux
-         e2fsprogs e2fsprogs-extra
-         mtools dosfstools nfs-utils ntfs-3g btrfs-progs xfsprogs f2fs-tools
+         alpine-base
+         kbd-bkeymaps haveged
+         mkinitfs syslinux util-linux
+         efibootmgr os-prober grub grub-efi
+         dhcpcd network-extras tzdata
+         openntpd openssl ca-certificates
+         coreutils usbutils ethtool hwids
+         sudo doas nano
+         iptables iptables-openrc
+         wireless-tools wpa_supplicant wpa_supplicant-openrc
+         iwd iwd-openrc
+         curl rsync rsync-openrc wget
+         e2fsprogs e2fsprogs-extra dosfstools mtools lvm2
+         nfs-utils ntfs-3g btrfs-progs xfsprogs f2fs-tools
          zfs zfs-openrc zfs-scripts zfs-utils-py
          parted sfdisk sgdisk
          "
@@ -60,16 +79,16 @@ profile_iso() {
 }
 EOF
 
-chmod +x ./aports/scripts/mkimg.iso.sh
+chmod +x ./aports/scripts/mkimg.custom.sh
 
 if [[ -d ./alpine ]]; then
-   sudo rm -rf ./alpine
+   sudo rm -r ./alpine
 fi
 
 mkdir ./alpine
 
 sh ./aports/scripts/mkimage.sh \
---profile iso \
+--profile custom \
 --outdir ./ \
 --workdir ./alpine \
 --repository https://dl-cdn.alpinelinux.org/alpine/edge/main \

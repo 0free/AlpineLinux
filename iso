@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 
 clear && cd ~
 
@@ -35,30 +35,30 @@ fi
 cat << EOF > ./aports/scripts/mkimg.custom.sh
 profile_custom() {
 
-   output_format="iso"
-   image_ext="iso"
-   arch="x86_64"
-	hostname="alpine"
+   output_format='iso'
+   image_ext='iso'
+   arch='x86_64'
+	hostname='alpine'
 
-   kernel_flavors="edge"
-   kernel_addons=""
+   kernel_flavors='lts'
+   kernel_addons='zfs'
 
-	initfs_cmdline="modules=loop,squashfs,sd-mod,usb-storage quiet"
+	initfs_cmdline='modules=loop,squashfs,sd-mod,usb-storage quiet'
 
-	initfs_features="ata base bootchart nvme ext4 mmc raid scsi squashfs usb"
+	initfs_features='ata base bootchart nvme ext4 mmc raid scsi squashfs usb'
 
 	modloop_sign=yes
 
-	grub_mod="all_video disk part_gpt part_msdos linux normal configfile efi_gop fat"
+	grub_mod='all_video disk part_gpt part_msdos linux normal configfile efi_gop fat'
 
-   boot_addons="amd-ucode intel-ucode"
+   boot_addons='amd-ucode intel-ucode'
 
-   initrd_ucode="/boot/amd-ucode.img /boot/intel-ucode.img"
+   initrd_ucode='/boot/amd-ucode.img /boot/intel-ucode.img'
 
-   apkovl="./aports/scripts/genapkovl-dhcp.sh"
+   apkovl='./aports/scripts/genapkovl-dhcp.sh'
 
-   apks="\$apks
-         alpine-base
+   apks="\$_apks
+         alpine-base busybox
          kbd-bkeymaps haveged
          mkinitfs syslinux util-linux
          efibootmgr os-prober grub grub-efi
@@ -72,7 +72,7 @@ profile_custom() {
          curl rsync rsync-openrc wget
          e2fsprogs e2fsprogs-extra dosfstools mtools lvm2
          nfs-utils ntfs-3g btrfs-progs xfsprogs f2fs-tools
-         zfs zfs-openrc zfs-scripts zfs-utils-py
+         zfs-lts zfs-openrc zfs-scripts zfs-utils-py
          parted sfdisk sgdisk
          "
 
@@ -85,14 +85,12 @@ if [[ -d ./alpine ]]; then
    sudo rm -r ./alpine
 fi
 
-mkdir ./alpine
-
 sh ./aports/scripts/mkimage.sh \
 --profile custom \
+--arch x86_64 \
 --outdir ./ \
 --workdir ./alpine \
 --repository https://dl-cdn.alpinelinux.org/alpine/edge/main \
---repository https://dl-cdn.alpinelinux.org/alpine/edge/community \
---repository https://dl-cdn.alpinelinux.org/alpine/edge/testing
+--repository https://dl-cdn.alpinelinux.org/alpine/edge/community
 
 #end

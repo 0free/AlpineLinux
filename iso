@@ -20,19 +20,19 @@ if ! sudo groups $USER | grep -q abuild; then
    sudo usermod -a -G abuild $USER
 fi
 
-if [[ ! -d ./.abuild ]]; then
+if [[ ! -d ~/.abuild ]]; then
    echo -en '\n' | abuild-keygen -i -a
 fi
 
-if [[ ! -d ./aports ]]; then
+if [[ ! -d ~/aports ]]; then
    git clone --single-branch -b master https://gitlab.alpinelinux.org/alpine/aports.git
 else
-   cd ./aports
+   cd ~/aports
    git pull
    cd ..
 fi
 
-cat << EOF > ./aports/scripts/mkimg.custom.sh
+cat << EOF > ~/aports/scripts/mkimg.custom.sh
 profile_custom() {
 
    output_format='iso'
@@ -40,8 +40,12 @@ profile_custom() {
    arch='x86_64'
 	hostname='alpine'
 
+   syslinux_serial="0 115200"
+
    kernel_flavors='lts'
    kernel_addons='zfs'
+
+   kernel_cmdline="unionfs_size=512M console=tty0 console=ttyS0,115200"
 
 	initfs_cmdline='modules=loop,squashfs,sd-mod,usb-storage quiet'
 
@@ -55,10 +59,9 @@ profile_custom() {
 
    initrd_ucode='/boot/amd-ucode.img /boot/intel-ucode.img'
 
-   apkovl='./aports/scripts/genapkovl-dhcp.sh'
+   apkovl='./aports/scripts/genapkovl.sh'
 
-   apks="\$_apks
-         alpine-base busybox
+   apks="\$apks
          kbd-bkeymaps haveged
          mkinitfs syslinux util-linux
          efibootmgr os-prober grub grub-efi
@@ -79,17 +82,17 @@ profile_custom() {
 }
 EOF
 
-chmod +x ./aports/scripts/mkimg.custom.sh
+chmod +x ~/aports/scripts/mkimg.custom.sh
 
-if [[ -d ./alpine ]]; then
-   sudo rm -r ./alpine
+if [[ -d ~/alpine ]]; then
+   sudo rm -r ~/alpine
 fi
 
-sh ./aports/scripts/mkimage.sh \
+sh ~/aports/scripts/mkimage.sh \
 --profile custom \
 --arch x86_64 \
---outdir ./ \
---workdir ./alpine \
+--outdir ~/ \
+--workdir ~/alpine \
 --repository https://dl-cdn.alpinelinux.org/alpine/edge/main \
 --repository https://dl-cdn.alpinelinux.org/alpine/edge/community
 

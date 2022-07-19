@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash
 
 clear && cd ~
 
@@ -32,8 +32,8 @@ else
    cd ..
 fi
 
-cat << EOF > ~/aports/scripts/mkimg.custom.sh
-profile_custom() {
+cat << EOF > ~/aports/scripts/mkimg.linux.sh
+profile_linux() {
 
    output_format='iso'
    image_ext='iso'
@@ -62,38 +62,32 @@ profile_custom() {
    apkovl='./aports/scripts/genapkovl.sh'
 
    apks="\$apks
-         kbd-bkeymaps haveged
          mkinitfs syslinux util-linux
          efibootmgr os-prober grub grub-efi
-         dhcpcd network-extras tzdata
-         openntpd openssl ca-certificates
          coreutils usbutils ethtool hwids
          sudo doas nano
          iptables iptables-openrc
          wireless-tools wpa_supplicant wpa_supplicant-openrc
-         iwd iwd-openrc
-         curl rsync rsync-openrc wget
+         eiwd eiwd-openrc
+         curl rsync rsync-openrc
          e2fsprogs e2fsprogs-extra dosfstools mtools lvm2
          nfs-utils ntfs-3g btrfs-progs xfsprogs f2fs-tools
-         zfs-lts zfs-openrc zfs-scripts zfs-utils-py
          parted sfdisk sgdisk
-         "
+         zfs-lts zfs-openrc zfs-scripts zfs-utils-py
+        "
 
 }
 EOF
 
-chmod +x ~/aports/scripts/mkimg.custom.sh
-
-if [[ -d ~/alpine ]]; then
-   sudo rm -r ~/alpine
-fi
+chmod +x ~/aports/scripts/mkimg.linux.sh
 
 sh ~/aports/scripts/mkimage.sh \
---profile custom \
+--profile linux \
 --arch x86_64 \
 --outdir ~/ \
 --workdir ~/alpine \
 --repository https://dl-cdn.alpinelinux.org/alpine/edge/main \
---repository https://dl-cdn.alpinelinux.org/alpine/edge/community
+--repository https://dl-cdn.alpinelinux.org/alpine/edge/community \
+--repository https://dl-cdn.alpinelinux.org/alpine/edge/testing
 
 #end

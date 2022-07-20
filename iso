@@ -62,7 +62,10 @@ profile_linux() {
          linux-firmware-amdgpu linux-firmware-radeon
          linux-firmware-nvidia
          linux-firmware-intel linux-firmware-i915
-         linux-firmware-rtlwifi
+         linux-firmware-rtlwifi linux-firmware-mwlwifi
+         linux-firmware-brcm
+         linux-firmware-qca linux-firmware-qcom
+         linux-firmware-ath10k linux-firmware-ath11k
          efibootmgr os-prober grub grub-efi
          util-linux coreutils usbutils ethtool hwids
          sudo doas nano curl rsync rsync-openrc

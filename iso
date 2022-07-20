@@ -1,8 +1,7 @@
-#!/bin/bash
+#!/bin/bash -e
 
 clear && cd ~
 
-sudo apk cache
 sudo apk update
 sudo apk upgrade
 sudo apk add build-base busybox fakeroot
@@ -40,12 +39,8 @@ profile_linux() {
    arch='x86_64'
 	hostname='alpine'
 
-   syslinux_serial="0 115200"
-
    kernel_flavors='lts'
    kernel_addons='zfs'
-
-   kernel_cmdline="unionfs_size=512M console=tty0 console=ttyS0,115200"
 
 	initfs_cmdline='modules=loop,squashfs,sd-mod,usb-storage quiet'
 
@@ -59,17 +54,21 @@ profile_linux() {
 
    initrd_ucode='/boot/amd-ucode.img /boot/intel-ucode.img'
 
-   apkovl='./aports/scripts/genapkovl.sh'
+   apkovl='./aports/scripts/apkovl.sh'
 
    apks="\$apks
-         mkinitfs syslinux util-linux
+         alpine-base busybox linux-lts
+         linux-firmware-amd linux-firmware-amd-ucode
+         linux-firmware-amdgpu linux-firmware-radeon
+         linux-firmware-nvidia
+         linux-firmware-intel linux-firmware-i915
+         linux-firmware-rtlwifi
          efibootmgr os-prober grub grub-efi
-         coreutils usbutils ethtool hwids
-         sudo doas nano
+         util-linux coreutils usbutils ethtool hwids
+         sudo doas nano curl rsync rsync-openrc
          iptables iptables-openrc
          wireless-tools wpa_supplicant wpa_supplicant-openrc
-         eiwd eiwd-openrc
-         curl rsync rsync-openrc
+         iwd iwd-openrc
          e2fsprogs e2fsprogs-extra dosfstools mtools lvm2
          nfs-utils ntfs-3g btrfs-progs xfsprogs f2fs-tools
          parted sfdisk sgdisk

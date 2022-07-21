@@ -442,7 +442,7 @@ setup_drive() {
     lsblk -o name,size,fstype,mountpoint,label,model
     printf -- '-%.0s' {1..100}; echo ''
 
-    drives=($(ls /dev/ | grep '^sd.\{2,2\}'))
+    drives=($(ls /dev/ | grep '^nvme.\{3\}$\|^sd.\{1\}$'))
 
     for i in ${!drives[@]}; do
         drives[$i]="/dev/${drives[$i]}"

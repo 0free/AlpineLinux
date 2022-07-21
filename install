@@ -95,7 +95,7 @@ packages_list() {
 
     if grep -q zfs /etc/fstab; then
         PACKAGE+=(
-            zfs zfs-openrc zfs-scripts zfs-utils-py
+            zfs zfs-lts zfs-openrc
         )
     fi
 
@@ -495,6 +495,7 @@ setup_drive() {
         fi
         boot_drive=$drive"1"
         root_drive=$drive"2"
+        echo ">>> reading partition tables"
         mdev -s && sleep 1
         echo ">>> creating boot filesystem"
         mkfs.vfat -F32 -n BOOT $boot_drive
@@ -886,12 +887,12 @@ enable_services() {
 
     if grep -q zfs /etc/fstab; then
         echo ">>> enabling ZFS services"
-        rc-update add zfs-import-cache boot
-        rc-update add zfs-import-scan boot
-        rc-update add zfs-mount boot
-        rc-update add zfs-share boot
-        rc-update add zfs-zed boot
-        rc-update add zfs.target boot
+        rc-update add zfs-import-cache sysinit
+        rc-update add zfs-import-scan sysinit
+        rc-update add zfs-mount sysinit
+        rc-update add zfs-share sysinit
+        rc-update add zfs-zed sysinit
+        rc-update add zfs.target sysinit
     fi
 
     modprobe ip_tables

@@ -439,28 +439,27 @@ setup_drive() {
 
     echo "# created by Saif AlSubhi"
     echo "--------------------------------------------------------------------------------------------"
-    lsblk -o name,size,mountpoint,fstype,label,model
+    lsblk -o name,size,fstype,mountpoint,label,model
     echo "--------------------------------------------------------------------------------------------"
 
-    location="/dev/disk/by-id/"
+    uuid_list=($(ls /dev/disk/by-uuid))
 
-    drives=($(ls $location | grep -Ew "^ata-.*|^nvme-.*|^scsi-.*|^usb-.*" | grep -v ".*-part"))
+    for uuid in uuid_list; do
+        drives+=$(blkid -U $uuid)
+    done
 
     menu "select a drive" drive ${drives[@]}
 
-    if ls $location | grep $drive | grep part; then
-        partitions=(re-partition)
-        partitions+=($(ls $location | grep $drive | grep part))
-        menu "select a root partition or re-partition the drive" partition ${partitions[@]}
-        if ls $location | grep $partition ; then
-            root_drive=$location"$partition"
-            partitions=($(ls $location | grep part))
+    if ls $drive* | grep "1"; then
+        partitions=($(ls $drive*))
+        menu "select a root partition or use the complete drive" partition ${partitions[@]}
+        if [[ $drive != $partition ]] ; then
+            root_drive=$partition
+            partitions=($(ls $disks | grep part))
             menu "select a boot partition to mount " partition ${partitions[@]}
-            boot_drive=$location"$partition"
+            boot_drive=$partition
         fi
     fi
-
-    drive=$location"$drive"
 
     filesystems=(btrfs ext4 xfs zfs)
     menu "select a filesystem" filesystem ${filesystems[@]}

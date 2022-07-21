@@ -444,7 +444,7 @@ setup_drive() {
 
     uuid_list=($(ls /dev/disk/by-uuid))
 
-    for uuid in uuid_list; do
+    for uuid in ${uuid_list[@]}; do
         drives+=$(blkid -U $uuid)
     done
 

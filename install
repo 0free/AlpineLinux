@@ -437,41 +437,41 @@ menu() {
 
 setup_drive() {
 
-    echo "# created by Saif AlSubhi"
-    printf -- '-%.0s' {1..100}; echo ""
-    lsblk -o name,size,fstype,mountpoint,label,uuid,model
-    printf -- '-%.0s' {1..100}; echo ""
+    echo '# created by Saif AlSubhi'
+    printf -- '-%.0s' {1..100}; echo ''
+    lsblk -o name,size,fstype,mountpoint,label,model
+    printf -- '-%.0s' {1..100}; echo ''
 
-    drives=($(ls /dev/ | grep -q "^sd*$"))
+    drives=($(ls /dev/ | grep '^sd.\{2,2\}'))
 
     for i in ${!drives[@]}; do
         drives[$i]="/dev/${drives[$i]}"
     done
 
-    menu "select a drive" drive ${drives[@]}
+    menu 'select a drive' drive ${drives[@]}
 
-    if ls $drive* | grep "1"; then
+    if ls $drive* | grep '1'; then
         partitions=($(ls $drive*))
-        menu "select a root partition or use the complete drive" partition ${partitions[@]}
+        menu 'select a root partition or use the complete drive ' partition ${partitions[@]}
         if [[ $drive != $partition ]] ; then
             root_drive=$partition
             partitions=($(ls $disks | grep part))
-            menu "select a boot partition to mount " partition ${partitions[@]}
+            menu 'select a boot partition to mount ' partition ${partitions[@]}
             boot_drive=$partition
         fi
     fi
 
     filesystems=(btrfs ext4 xfs zfs)
-    menu "select a filesystem" filesystem ${filesystems[@]}
+    menu 'select a filesystem' filesystem ${filesystems[@]}
 
     computers=(minimal miner server workstation)
-    menu "select a computer" computer ${computers[@]}
+    menu 'select a computer' computer ${computers[@]}
 
     desktops=(gnome kde kde-mobile cinnamon)
-    menu "select a desktop" desktop ${desktops[@]}
+    menu 'select a desktop' desktop ${desktops[@]}
 
     bootloaders=(syslinux grub)
-    menu "select a desktop" bootloader ${bootloaders[@]}
+    menu 'select a desktop' bootloader ${bootloaders[@]}
 
     if ! test sgdisk; then
         echo ">>> installing sgdisk"

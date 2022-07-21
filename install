@@ -482,20 +482,20 @@ setup_drive() {
         echo ">>> wiping filesystm"
         wipefs -a -f $drive
         echo ">>> creating GPT"
-        sgdisk -g -o -U $drive
+        sgdisk -o $drive
         echo ">>> creating boot partition"
-        sgdisk -g -n 1:0:+"$bootsize"M -c 1:BOOT -t 1:ef00 $drive
+        sgdisk -n 1::+"$bootsize"MiB -c 1:BOOT -t 1:ef00 $drive
         echo ">>> creating root partition"
         if [[ $filesystem == 'zfs' ]]; then
-            sgdisk -g -n 2:0:0 -c 2:ZFS -t 2:bf00 $drive
+            sgdisk -n 2:: -c 2:ZFS -t 2:bf00 $drive
         else
-            sgdisk -g -n 2:0:0 -c 2:LINUX -t 2:8300 $drive
+            sgdisk -n 2:: -c 2:LINUX -t 2:8300 $drive
         fi
         boot_drive=$drive"1"
         root_drive=$drive"2"
         echo ">>> creating boot filesystem"
         sleep 1
-        mkfs.fat -F32 -n BOOT $boot_drive
+        mkfs.vfat -F32 -n BOOT $boot_drive
     fi
 
     echo ">>> creating root filesystem"

@@ -70,13 +70,13 @@ packages_list() {
         xf86-video-amdgpu
     )
 
-    if [[ $bootloaders == 'grub']]; then
+    if [[ $bootloaders == 'grub' ]]; then
         PACKAGES+=(
             grub-efi grub grub-bash-completion
         )
     fi
 
-    if [[ $bootloaders == 'syslinux']]; then
+    if [[ $bootloaders == 'syslinux' ]]; then
         PACKAGES+=(
             syslinux
         )
@@ -610,9 +610,9 @@ update_packages() {
 
     echo ">>> updating packages"
 
-    echo "http://dl-cdn.alpinelinux.org/alpine/$branch/main" > /etc/apk/repositories
-    echo "http://dl-cdn.alpinelinux.org/alpine/$branch/community" >> /etc/apk/repositories
-    echo "http://dl-cdn.alpinelinux.org/alpine/$branch/testing" >> /etc/apk/repositories
+    echo "https://dl-cdn.alpinelinux.org/alpine/$branch/main" > /etc/apk/repositories
+    echo "https://dl-cdn.alpinelinux.org/alpine/$branch/community" >> /etc/apk/repositories
+    echo "https://dl-cdn.alpinelinux.org/alpine/$branch/testing" >> /etc/apk/repositories
 
     echo << EOF >> /etc/rsyncd.conf
 [alpine]

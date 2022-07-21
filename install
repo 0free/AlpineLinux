@@ -442,11 +442,10 @@ setup_drive() {
     lsblk -o name,size,fstype,mountpoint,label,model
     echo "--------------------------------------------------------------------------------------------"
 
-    uuid_list=($(ls /dev/disk/by-uuid/))
+    drives=($(ls /dev/disk/by-uuid/))
 
-    for uuid in ${uuid_list[@]}; do
-        drives+=$(blkid -U $uuid)
-        drives+=' '
+    for i in ${!drives[@]}; do
+        drives[i]=$(blkid -U $drives[i])
     done
 
     menu "select a drive" drive ${drives[@]}

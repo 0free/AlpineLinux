@@ -491,8 +491,8 @@ setup_drive() {
         else
             sgdisk -g -n 2:0:0 -c 2:ROOT -t 2:8300 $drive
         fi
-        boot_drive=$drive"-part1"
-        root_drive=$drive"-part2"
+        boot_drive=$drive"1"
+        root_drive=$drive"2"
         echo ">>> creating boot filesystem"
         sleep 1 && mkfs.fat -F32 -n BOOT $boot_drive
     fi

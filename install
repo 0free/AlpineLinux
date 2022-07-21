@@ -95,7 +95,7 @@ packages_list() {
 
     if grep -q zfs /etc/fstab; then
         PACKAGE+=(
-            zfs zfs-lts zfs-openrc
+            akms zfs-src zfs-openrc
         )
     fi
 

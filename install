@@ -972,14 +972,14 @@ install_grub() {
     grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id="Alpine Linux"
 
     if grep -q zfs /etc/fstab; then
-        #sed -i 's|^GRUB_CMDLINE_LINUX=".*"|GRUB_CMDLINE_LINUX="modules=sd-mod,usb-storage,ext4,nvme quit rootfstype=ext4"|' /etc/default/grub
-        #sed -i 's|^GRUB_PRELOAD_MODULES=".*"|GRUB_PRELOAD_MODULES="usb usb_keyboard part_gpt nvme zfs zfscrypt zfsinfo"|' /etc/default/grub
-        #echo 'export ZPOOL_VDEV_NAME_PATH=YES' >> /etc/profile.d/zpool_vdev_name_path.sh
-        #source /etc/profile.d/zpool_vdev_name_path.sh
-        #echo 'Defaults env_keep += "ZPOOL_VDEV_NAME_PATH"' >> /etc/sudoer
-        #sed -i "s|rpool=.*|rpool=\`zdb -l \${GRUB_DEVICE} \| grep -E '[[:blank:]]name' \| cut -d\\\' -f 2\`|" /etc/grub.d/10_linux
+        sed -i 's|^GRUB_CMDLINE_LINUX=".*"|GRUB_CMDLINE_LINUX="modules=sd-mod,usb-storage,ext4,nvme quit rootfstype=ext4"|' /etc/default/grub
+        sed -i 's|^GRUB_PRELOAD_MODULES=".*"|GRUB_PRELOAD_MODULES="usb usb_keyboard part_gpt nvme zfs zfscrypt zfsinfo"|' /etc/default/grub
+        echo 'export ZPOOL_VDEV_NAME_PATH=YES' >> /etc/profile.d/zpool_vdev_name_path.sh
+        source /etc/profile.d/zpool_vdev_name_path.sh
+        echo 'Defaults env_keep += "ZPOOL_VDEV_NAME_PATH"' >> /etc/sudoer
+        sed -i "s|rpool=.*|rpool=\`zdb -l \${GRUB_DEVICE} \| grep -E '[[:blank:]]name' \| cut -d\\\' -f 2\`|" /etc/grub.d/10_linux
     else
-        #sed -i 's|^GRUB_PRELOAD_MODULES=".*"|GRUB_PRELOAD_MODULES="usb usb_keyboard part_gpt nvme"|' /etc/default/grub
+        sed -i 's|^GRUB_PRELOAD_MODULES=".*"|GRUB_PRELOAD_MODULES="usb usb_keyboard part_gpt nvme"|' /etc/default/grub
     fi
 
     if [[ -d /boot/grub/themes/starfield ]]; then

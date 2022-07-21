@@ -1,6 +1,6 @@
 #!/bin/bash
 
-bootsize='399' # MB
+bootsize='199' # MB
 swapfile='2048' # MB
 timezone='Asia/Muscat'
 language=(ar_OM en_US)
@@ -484,7 +484,7 @@ setup_drive() {
         echo ">>> creating GPT"
         sgdisk -g -o -U $drive
         echo ">>> creating boot partition"
-        sgdisk -n 1:0:+"$bootsize"M -c 1:BOOT -t 1:ef00 $drive
+        sgdisk -g -n 1:0:+"$bootsize"M -c 1:BOOT -t 1:ef00 $drive
         echo ">>> creating root partition"
         if [[ $filesystem == 'zfs' ]]; then
             sgdisk -g -n 2:0:0 -c 2:ROOT -t 2:bf00 $drive
@@ -494,7 +494,8 @@ setup_drive() {
         boot_drive=$drive"1"
         root_drive=$drive"2"
         echo ">>> creating boot filesystem"
-        sleep 1 && mkfs.fat -F32 -n BOOT $boot_drive
+        sleep 1
+        mkfs.fat -F32 -n BOOT $boot_drive
     fi
 
     echo ">>> creating root filesystem"

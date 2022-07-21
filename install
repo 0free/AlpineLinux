@@ -438,14 +438,14 @@ menu() {
 setup_drive() {
 
     echo "# created by Saif AlSubhi"
-    printf -- '-%.0s' {1..80}; echo ""
+    printf -- '-%.0s' {1..100}; echo ""
     lsblk -o name,size,fstype,mountpoint,label,uuid,model
-    printf -- '-%.0s' {1..80}; echo ""
+    printf -- '-%.0s' {1..100}; echo ""
 
-    drives=($(ls /dev/disk/by-uuid/))
+    drives=($(ls /dev/ | grep -q "^sd*$"))
 
     for i in ${!drives[@]}; do
-        drives[$i]=$(blkid -U ${drives[$i]})
+        drives[$i]="/dev/${drives[$i]}"
     done
 
     menu "select a drive" drive ${drives[@]}

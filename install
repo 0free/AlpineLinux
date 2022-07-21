@@ -439,7 +439,7 @@ setup_drive() {
 
     echo "# created by Saif AlSubhi"
     echo "--------------------------------------------------------------------------------------------"
-    lsblk -o name,size,fstype,mountpoint,label,model
+    lsblk -o name,size,fstype,mountpoint,label,uuid,model
     echo "--------------------------------------------------------------------------------------------"
 
     drives=($(ls /dev/disk/by-uuid/))

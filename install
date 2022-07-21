@@ -484,7 +484,7 @@ setup_drive() {
         echo ">>> deleting partitions"
         sgdisk -Z $drive
         echo ">>> creating GPT"
-        sgdisk $drive
+        sgdisk -U $drive
         echo ">>> creating boot partition"
         sgdisk -n 0:0:+"$bootsize"M -c 0:EFI -t 0:ef00 $drive
         echo ">>> creating root partition"

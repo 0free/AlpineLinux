@@ -445,7 +445,7 @@ setup_drive() {
     drives=($(ls /dev/disk/by-uuid/))
 
     for i in ${!drives[@]}; do
-        drives[i]=$(blkid -U $drives[i])
+        ${drives[$i]}=$(blkid -U ${drives[$i]})
     done
 
     menu "select a drive" drive ${drives[@]}

@@ -484,9 +484,9 @@ setup_drive() {
         echo ">>> deleting partitions"
         sgdisk -Z $drive
         echo ">>> creating GPT"
-        sgdisk -U $drive
+        sgdisk $drive
         echo ">>> creating boot partition"
-        sgdisk -u -n 0:0:+"$bootsize"MiB -c 0:EFI -t 0:ef00 $drive
+        sgdisk -n 0:0:+"$bootsize"MiB -c 0:EFI -t 0:ef00 $drive
         echo ">>> creating root partition"
         if [[ $filesystem == 'zfs' ]]; then
             sgdisk -n 0:0:0 -c 0:ZFS -t 0:bf00 $drive

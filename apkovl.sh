@@ -47,7 +47,7 @@ EOF
 mkdir -p "$tmp"/etc/apk
 
 makefile root:root 0644 "$tmp"/etc/apk/world <<EOF
-alpine-base iwd curl sgdisk zfs
+alpine-base iwd curl bash bash-completion sgdisk zfs
 EOF
 
 makefile root:root 0644 "$tmp"/etc/apk/repositories <<EOF

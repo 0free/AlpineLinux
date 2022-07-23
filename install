@@ -17,21 +17,21 @@ packages_list() {
         amd-ucode intel-ucode
         # desktop
         xorg-server xdg-desktop-portal xf86-input-libinput eudev
-        elogind elogind-openrc
-        dbus dbus-openrc dbus-x11
+        elogind
+        dbus dbus-x11
         mesa mesa-dri-gallium
         # wayland
         xwayland
         # network
-        ethtool rsync rsync-openrc
+        ethtool rsync
         # cpu
-        cpupower cpupower-openrc
+        cpupower
         # hardware
         bolt pciutils lm-sensors tpm2-tools
         # efi boot
         efibootmgr secureboot-hook kernel-hooks
         # base
-        build-base busybox fakeroot sudo rsyslog rsyslog-openrc which dialog curl wget
+        build-base busybox fakeroot sudo rsyslog which dialog curl wget
         # gnu
         coreutils grep gawk findutils diffutils
         # bash
@@ -43,13 +43,13 @@ packages_list() {
         # filesystem
         lvm2 os-prober gptfdisk dosfstools mtools ntfs-3g ntfs-3p-progs btrfs-progs xfsprogs hfsprogs exfatprogs f2fs-tools udftools e2fsprogs sgdisk udisks2 mmc-utils jfsutils
         # firewall
-        gufw ufw ufw-openrc ufw-bash-completion iptables iptables-openrc ipset ipset-openrc
+        gufw ufw ufw-bash-completion iptables ipset
         # wireless
-        wireless_tools wpa_supplicant wpa_supplicant-openrc iwd iwd-openrc 
+        wireless_tools iwd
         # bluetooth
-        bluez bluez-openrc bluez-utils bluez-als bluez-alsa-openrc
+        bluez bluez-utils bluez-als
         # audio
-        alsa-utils alsa-utils-openrc alsa-lib alsaconf alsa-ucm-conf
+        alsa-utils alsa-lib alsaconf alsa-ucm-conf
         pipewire pipewire-alsa pipewire-tools pipewire-pulse
         pipewire-spa-bluez pipewire-spa-vulkan easyeffects
         wireplumper
@@ -95,7 +95,7 @@ packages_list() {
 
     if grep -q zfs /etc/fstab; then
         PACKAGE+=(
-            akms zfs-src zfs-openrc
+            zfs
         )
     fi
 
@@ -103,7 +103,7 @@ packages_list() {
 
         PACKAGES+=(
             # gnome session
-            gdm gdm-openrc mutter xdg-desktop-portal-gtk xdg-desktop-portal-gnome gnome-desktop gnome-desktop-lang gnome-session gnome-shell-extensions gnome-shell-schemas gnome-control-center gnome-control-center-bash-completion gnome-tweaks gnome-menus chrome-gnome-shell gsettings-desktop-schemas udisks2-bash-completion tracker-bash-completion gpaste-gnome pinentry-gnome clutter clutter-gst clutter-gtk
+            gdm mutter xdg-desktop-portal-gtk xdg-desktop-portal-gnome gnome-desktop gnome-desktop-lang gnome-session gnome-shell-extensions gnome-shell-schemas gnome-control-center gnome-control-center-bash-completion gnome-tweaks gnome-menus chrome-gnome-shell gsettings-desktop-schemas udisks2-bash-completion tracker-bash-completion gpaste-gnome pinentry-gnome clutter clutter-gst clutter-gtk
             # gnome tools
             adwaita-icon-theme gnome-keyring gnome-console gnome-terminal gnome-disk-utility gnome-system-monitor file-roller
             # nautilus
@@ -117,7 +117,7 @@ packages_list() {
             # gedit spell check
             aspell hspell hunspell nuspell libvoikko
             # network
-            networkmanager networkmanager-openrc networkmanager-common networkmanager-bash-completion networkmanager-elogind networkmanager-wwan networkmanager-wifi networkmanager-bluetooth networkmanager-openvpn network-manager-applet networkmanager-initrd-generator
+            networkmanager networkmanager-common networkmanager-bash-completion networkmanager-elogind networkmanager-wwan networkmanager-wifi networkmanager-bluetooth networkmanager-openvpn network-manager-applet networkmanager-initrd-generator
         )
 
     fi
@@ -188,7 +188,7 @@ packages_list() {
             # fonts tools
             font-manager font-viewer
             # fonts
-            terminus-font ttf-inconsolata ttf-dejavu font-bitstream-* font-noto font-noto-cjk ttf-font-awesome font-arabic-misc font-noto-arabic font-noto-armenian font-noto-cherokee font-noto-devanagari font-noto-ethiopic font-noto-georgian tt-droid font-inter font-opensans ttf-freefont
+            terminus-font ttf-inconsolata ttf-dejavu font-bitstream-* font-noto font-noto-cjk ttf-font-awesome font-arabic-misc font-noto-arabic font-noto-armenian font-noto-cherokee font-noto-devanagari font-noto-ethiopic font-noto-georgian tt-droid font-inter font-opensans ttf-freefont font-roboto-mono font-roboto-flex
             # vulkan
             vulkan-headers vulkan-loader vulkan-validation-layers vulkan-tools
             # google
@@ -230,7 +230,7 @@ packages_list() {
             # printer
             cups cups-pdf bluez-cups
             # driver
-            xinput gkraken ccid solaar razercfg razercfg-openrc razercfg-gui razergenie
+            xinput gkraken ccid solaar razercfg razercfg-gui razergenie
             # math
             geogebra sagemath mathjax2 octave
             # finance
@@ -252,7 +252,7 @@ packages_list() {
             # mauikit
             mauikit mauikit-accounts mauikit-filebrowsing mauikit-imagetools mauikit-texteditor
             # bitcoin
-            bitcoin bitcoin-openrc
+            bitcoin
             # game emu
             pcsx2 dolphin-emu xwiimote pcsxr
             # java
@@ -278,7 +278,7 @@ packages_list() {
             # meetings
             teams zoom
             # drives
-            onedrive onedrive-openrc
+            onedrive
             # social
             whatsapp-for-linux whatsie walc cawbird
             # wireless drivers
@@ -296,7 +296,7 @@ packages_list() {
             # music player
             nuclear-player amberol sublime-music
             # music server
-            navidrome navidrome-openrc
+            navidrome
             # video edit
             davinci-resolve video-trimmer lightworks
             # youtube
@@ -346,7 +346,7 @@ packages_list() {
             # gaming
             legendary
             # touch
-            touchegg touchegg-openrc
+            touchegg
             # transtation
             go-translation
             # nvidia optimus
@@ -379,12 +379,12 @@ packages_list() {
             # php admin
             phpmyadmin
             # database
-            mariadb mariadb-openrc
+            mariadb
             # mail
-            postfix postfix-openrc postfix-mysql postfix-pcre postfixadmin
-            dovecot dovecot-openrc dovecot-submissiond dovecot-lmtpd dovecot-pop3d dovecot-sql dovecot-mysql
+            postfix postfix-mysql postfix-pcre postfixadmin
+            dovecot dovecot-submissiond dovecot-lmtpd dovecot-pop3d dovecot-sql dovecot-mysql
             opendkim opendkim-utils
-            cyrus-sasl cyrus-sasl-openrc
+            cyrus-sasl
             # tools
             imagemagick
             # server
@@ -632,9 +632,9 @@ install_base() {
     echo 'nameserver 8.8.8.8' >> /mnt/etc/resolv.conf
 
     echo ">>> installing base packages"
-    apk add --root=/mnt alpine-base linux-edge mkinitfs
+    apk add --root=/mnt alpine-base
     apk add --root=/mnt e2fsprogs grub grub-efi
-    apk add --root=/mnt networkmanager wireless_tools wpa_supplicant iwd iwd-openrc
+    apk add --root=/mnt networkmanager wireless_tools iwd
     apk add --root=/mnt sudo
 
     set_fstab
@@ -804,12 +804,13 @@ setup_desktop() {
 
 install_linux() {
 
-    list=' linux-edges'
-    list+=' linux-firmware-intel linux-firmware-intel'
+    list=' linux-edge'
+    list+=' linux-firmware-intel linux-firmware-i915'
     list+=' linux-firmware-amd linux-firmware-amd-ucode'
-    list+=' linux-firmware-amdgpu linux-firmware-radeon'
     list+=' linux-firmware-nvidia'
-    list+=' linux-firmware-rtlwifi'
+    list+=' linux-firmware-amdgpu'
+    list+=' linux-firmware-other'
+    list+=' linux-firmware-rtlwifi linux-firmware-rtl_bt linux-firmware-rtl_nic'
     echo ">>> installing linux"
     apk add $list
 
@@ -839,7 +840,6 @@ enable_services() {
     echo ">>> enabling services"
 
     rc-update add networkmanager default
-    rc-update add wpa_supplicant default
     rc-update add iwd default
     rc-update add udev default
     rc-update add dbus default

@@ -529,11 +529,11 @@ setup_drive() {
 create_zfs() {
 
     echo ">>> loading ZFS modules"
-    #modprobe zfs
+    modprobe zfs
     echo ">>> checking ZFS modules"
     if ! lsmod | grep -qi zfs; then
        echo 'ERROR: ZFS modules are missing'
-       #create_rootfs
+       create_rootfs
     fi
     echo ">>> creating ZFS pool"
     zpool create -f -o ashift=12 -o autotrim=on -O recordsize=8192 \

@@ -31,6 +31,10 @@ else
    cd ..
 fi
 
+cd ~/aports/scripts/
+#curl -LO raw.githubusercontent.com/0free/AlpineLinux/1/apkovl.sh
+cd ~
+
 cat << EOF > ~/aports/scripts/mkimg.linux.sh
 profile_linux() {
 
@@ -39,12 +43,9 @@ profile_linux() {
    arch='x86_64'
 	hostname='alpine'
 
-   kernel_flavors='lts'
-   kernel_addons='zfs'
-
 	initfs_cmdline='modules=loop,squashfs,sd-mod,usb-storage quiet'
 
-	initfs_features='ata base bootchart nvme ext4 mmc raid scsi squashfs usb'
+	initfs_features='base nvme ata usb bootchart btrfs zfs xfs ext4 f2fs lvm mmc raid scsi squashfs'
 
 	modloop_sign=yes
 
@@ -56,32 +57,38 @@ profile_linux() {
 
    apkovl='./aports/scripts/apkovl.sh'
 
+   kernel_flavors='lts'
+   kernel_addons='xtables-addons'
+
    apks="\$apks
-         alpine-base busybox linux-lts
+         alpine-base busybox kbd-bkeymaps
+         dhcpcd haveged tzdata
+         linux-firmware-other
          linux-firmware-amd linux-firmware-amd-ucode
          linux-firmware-amdgpu linux-firmware-radeon
          linux-firmware-nvidia
          linux-firmware-intel linux-firmware-i915
-         linux-firmware-rtlwifi linux-firmware-mwlwifi
+         linux-firmware-rtl_bt linux-firmware-rtl_nic
+         linux-firmware-rtlwifi
          linux-firmware-brcm
-         linux-firmware-qca linux-firmware-qcom
-         linux-firmware-ath10k linux-firmware-ath11k
-         efibootmgr os-prober grub grub-efi
-         util-linux coreutils usbutils ethtool hwids
-         sudo doas nano curl rsync rsync-openrc
-         iptables iptables-openrc
-         wireless-tools wpa_supplicant wpa_supplicant-openrc
-         iwd iwd-openrc
+         linux-firmware-qca
+         syslinux efibootmgr os-prober grub grub-efi
+         util-linux coreutils usbutils ethtool
+         bash bash-completion sudo doas nano
+         openssl curl wget rsync
+         network-extras iwd dbus
          e2fsprogs e2fsprogs-extra dosfstools mtools lvm2
-         nfs-utils ntfs-3g btrfs-progs xfsprogs f2fs-tools
-         parted sfdisk sgdisk
-         zfs-lts zfs-openrc zfs-scripts zfs-utils-py
+         btrfs-progs xfsprogs nfs-utils ntfs-3g f2fs-tools
+         sfdisk sgdisk
+         zfs
         "
 
 }
 EOF
 
 chmod +x ~/aports/scripts/mkimg.linux.sh
+
+sed -i 's|discover_retries = 5|discover_retries = 0|g' ~/aports/main/busybox/0005-udhcpc-set-default-discover-retries-to-5.patch
 
 sh ~/aports/scripts/mkimage.sh \
 --profile linux \

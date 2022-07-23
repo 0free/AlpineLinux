@@ -32,7 +32,7 @@ else
 fi
 
 cd ~/aports/scripts/
-#curl -LO raw.githubusercontent.com/0free/AlpineLinux/1/apkovl.sh
+curl -LO raw.githubusercontent.com/0free/AlpineLinux/1/apkovl.sh
 cd ~
 
 cat << EOF > ~/aports/scripts/mkimg.linux.sh

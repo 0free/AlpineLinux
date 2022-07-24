@@ -642,6 +642,9 @@ install_base() {
     echo 'nameserver 1.0.0.1' >> /mnt/etc/resolv.conf
     echo 'nameserver 8.8.8.8' >> /mnt/etc/resolv.conf
 
+    echo ">>> installing bash"
+    apk add --root=/mnt bash bash-completion
+
     echo ">>> installing network packages"
     apk add --root=/mnt networkmanager iwd
 
@@ -684,7 +687,7 @@ change_root() {
     echo ">>> changing root"
     mount --bind /dev /mnt/dev
     mount --bind /sys /mnt/sys
-    chroot /mnt /bin/bash /mnt/root/install
+    chroot /mnt /mnt/bin/bash /mnt/root/install
 
 }
 

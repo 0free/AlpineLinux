@@ -630,8 +630,10 @@ install_base() {
     echo ">>> installing alpine-base"
     apk add --root=/mnt --initdb alpine-base --keys-dir /etc/apk/keys --repositories-file /etc/apk/repositories
 
-    echo ">>> deleting fstab"
-    rm /mnt/etc/fstab
+    if [[ -f /mnt/etc/fstab ]]; then
+        echo ">>> deleting fstab"
+        rm /mnt/etc/fstab
+    fi
 
     echo ">>> copying repositories"
     cp /etc/apk/repositories /mnt/etc/apk/repositories

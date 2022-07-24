@@ -766,7 +766,7 @@ disable_root() {
 
 set_locale() {
 
-    setup-keymap $keymap
+    setup-keymap 'us'
 
     echo ">>> setting locale"
     if [[ ! $language ]]; then

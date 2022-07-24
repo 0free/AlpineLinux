@@ -1,7 +1,7 @@
 #!/bin/bash
 
-bootsize='199' # MB
-swapfile='2048' # MB
+bootsize='199MiB'
+swapfile='2048MiB'
 timezone='Asia/Muscat'
 language=(ar_OM en_US)
 keymap=(us us)
@@ -42,7 +42,7 @@ packages_list() {
         # compression
         brotli zstd libzip zip git lz4 lzo unzip
         # filesystem
-        lvm2 os-prober gptfdisk dosfstools mtools ntfs-3g ntfs-3g-progs btrfs-progs xfsprogs hfsprogs exfatprogs f2fs-tools udftools e2fsprogs sgdisk udisks2 mmc-utils jfsutils
+        e2fsprogs lvm2 os-prober gptfdisk dosfstools mtools ntfs-3g ntfs-3g-progs btrfs-progs xfsprogs hfsprogs exfatprogs f2fs-tools udftools sgdisk udisks2 mmc-utils jfsutils
         # firewall
         gufw ufw ufw-bash-completion iptables ipset
         # wireless
@@ -487,7 +487,7 @@ setup_drive() {
         echo ">>> creating GPT"
         sgdisk -U $drive
         echo ">>> creating boot partition"
-        sgdisk -n 0:0:+"$bootsize"M -c 0:EFI -t 0:ef00 $drive
+        sgdisk -n 0:0:+$bootsize -c 0:EFI -t 0:ef00 $drive
         echo ">>> creating root partition"
         if [[ $filesystem == 'zfs' ]]; then
             sgdisk -n 0:0:0 -c 0:ZFS -t 0:bf00 $drive
@@ -938,7 +938,7 @@ create_swap_file() {
 
     if grep -q zfs /etc/fstab; then
         if ! zfs get volsize rpool/swap; then
-            zfs create -V "$swapfile"M -b 8192 -o compression=zle \
+            zfs create -V $swapfile -b 8192 -o compression=zle \
             -o logbias=throughput -o sync=always -o primarycache=metadata \
             -o secondarycache=none -o com.sun:auto-snapshot=false rpool/swap
             mkswap -f rpool/swap
@@ -946,10 +946,8 @@ create_swap_file() {
         fi
     else
         if [[ ! -f /swapfile ]]; then
-            truncate -s 0 /swapfile
-            chattr +C /swapfile
-            dd if=/dev/zero of=/swapfile bs=1M count="$swapfile"M status=progress
-            chmod 600 /swapfile
+            dd if=/dev/zero of=/swapfile bs=1M count=$swapfile status=progress
+            chmod 0600 /swapfile
             mkswap -f /swapfile
             swapon /swapfile
         fi

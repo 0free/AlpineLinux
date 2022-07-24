@@ -16,6 +16,7 @@ packages_list() {
         # micro-codes
         amd-ucode intel-ucode
         # desktop
+        musl-lang
         xorg-server xdg-desktop-portal xf86-input-libinput eudev
         elogind
         dbus dbus-x11
@@ -39,21 +40,21 @@ packages_list() {
         # utilities
         openssl ncurses-dev
         # compression
-        brotli zstd libzip zip git lz4 lzo unrar unzip
+        brotli zstd libzip zip git lz4 lzo unzip
         # filesystem
-        lvm2 os-prober gptfdisk dosfstools mtools ntfs-3g ntfs-3p-progs btrfs-progs xfsprogs hfsprogs exfatprogs f2fs-tools udftools e2fsprogs sgdisk udisks2 mmc-utils jfsutils
+        lvm2 os-prober gptfdisk dosfstools mtools ntfs-3g ntfs-3g-progs btrfs-progs xfsprogs hfsprogs exfatprogs f2fs-tools udftools e2fsprogs sgdisk udisks2 mmc-utils jfsutils
         # firewall
         gufw ufw ufw-bash-completion iptables ipset
         # wireless
         wireless_tools iwd
-        # bluetooth
-        bluez bluez-utils bluez-als
         # audio
         alsa-utils alsa-lib alsaconf alsa-ucm-conf
         pipewire pipewire-alsa pipewire-tools pipewire-pulse
         pipewire-spa-bluez pipewire-spa-vulkan easyeffects
-        wireplumper
+        wireplumber
         sof-bin sof-firmware sof-tools
+        # bluetooth
+        bluez-alsa bluez-alsa-utils
         # firmware
         fwupd fwupd-efi fwupd-plugin-bios fwupd-plugin-cpu fwupd-plugin-tpm fwupd-plugin-nvme fwupd-plugin-ata
         # trackpad
@@ -61,7 +62,7 @@ packages_list() {
         # browser
         chromium-chromedriver
         # mesa
-        mesa vulkan-mesa-layers
+        mesa mesa-vulkan-layers
         # intel GPU
         xf86-video-intel mesa-vulkan-intel intel-media-driver
         # nvidia GPU

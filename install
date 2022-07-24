@@ -529,7 +529,7 @@ setup_drive() {
 create_zfs() {
 
     echo ">>> loading ZFS modules"
-    modprobe zfs
+    /sbin/modprobe zfs
     echo ">>> checking ZFS modules"
     if ! lsmod | grep -qi zfs; then
        echo 'ERROR: ZFS modules are missing'
@@ -893,7 +893,7 @@ enable_services() {
         rc-update add zfs.target sysinit
     fi
 
-    modprobe ip_tables
+    /sbin/modprobe ip_tables
     echo 'IPFORWARD="yes"' > /etc/conf.d/iptables
 
 }
@@ -905,7 +905,7 @@ configure_alpine() {
     fi
     cp /usr/share/pipewire/pipewire.conf /etc/pipewire/
     echo '{ path = "wireplumber"  args = "" }' > /etc/pipewire/pipewire.conf
-    modprobe snd_seq
+    /sbin/modprobe snd_seq
     echo snd_seq >> /etc/modules
 
 }

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 bootsize='199MiB'
-swapfile='2048MiB'
+swapfile='2048MiB' # '0' to disable
 timezone='Asia/Muscat'
 language=(ar_OM en_US)
 keymap=(us us)
@@ -672,6 +672,7 @@ set_fstab() {
 
     echo "/EFI /boot none ssd,rw,discard,noatime,bind 0 0" >> /mnt/etc/fstab
 
+    echo $drive > /mnt/root/drive
     echo $computer > /mnt/root/computer
     echo $desktop > /mnt/root/desktop
     change_root
@@ -796,7 +797,7 @@ setup_desktop() {
         add_commands
     fi
 
-    if [[ $swapfile -gt 0 ]]; then
+    if [[ $swapfile != '0' ]]; then
         create_swap_file
     fi
 
@@ -858,7 +859,7 @@ enable_services() {
     rc-update add iptables default
     rc-update add ipset default
 
-    if [[ $swapfile -gt 0 ]]; then
+    if [[ $swapfile != '0' ]]; then
         rc-update add swap default
     fi
 

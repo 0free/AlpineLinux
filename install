@@ -645,6 +645,9 @@ install_base() {
     echo ">>> installing bash"
     apk add --root=/mnt bash bash-completion
 
+    echo ">>> installing sudo"
+    apk add --root=/mnt sudo
+
     echo ">>> installing network packages"
     apk add --root=/mnt networkmanager iwd
 
@@ -706,8 +709,6 @@ set_host() {
     echo ">>> setting hostname"
     read -p " --> hostname: " HOSTNAME
     echo "$HOSTNAME" > /etc/hostname
-
-    setup-hostname $hostname
 
     echo "127.0.0.1 localhost.localdomain localhost $hostname.localdomain $hostname" > /etc/hosts
     echo "::1       localhost.localdomain localhost $hostname.localdomain $hostname" >> /etc/hosts

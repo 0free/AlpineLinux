@@ -624,18 +624,20 @@ install_base() {
     update_packages
 
     echo ">>> adding repositories"
-    apk add --root=/mnt --initdb $(cat /etc/apk/world) --keys-dir /etc/apk/keys --repositories-file /etc/apk/repositories
+    apk add --root=/mnt --keys-dir /etc/apk/keys --repositories-file /etc/apk/repositories
+
+    echo ">>> copying repositories"
     cp /etc/apk/repositories /mnt/etc/apk/repositories
 
-    echo ">>> name resolution"
+    echo ">>> adding name resolution"
     echo 'nameserver 1.0.0.1' >> /mnt/etc/resolv.conf
     echo 'nameserver 8.8.8.8' >> /mnt/etc/resolv.conf
 
-    echo ">>> installing base packages"
+    echo ">>> installing alpine-base"
     apk add --root=/mnt alpine-base
-    apk add --root=/mnt e2fsprogs grub grub-efi
-    apk add --root=/mnt networkmanager wireless_tools iwd
-    apk add --root=/mnt sudo
+
+    echo ">>> installing network packages"
+    apk add --root=/mnt networkmanager iwd
 
     set_fstab
 
@@ -672,7 +674,7 @@ change_root() {
     echo ">>> changing root"
     mount --bind /dev /mnt/dev
     mount --bind /sys /mnt/sys
-    chroot /mnt /bin/sh install
+    chroot /mnt /bin/bash /mnt/root/install
 
 }
 
@@ -960,8 +962,11 @@ create_swap_file() {
 
 install_syslinux() {
 
-    sudo mkdir -p /boot/extlinux/
-    sudo extlinux --install /boot/extlinux/
+    echo ">>> installing syslinux"
+    apk add --root=/mnt syslinux
+    dd bs=440 count=1 conv=notrunc if=/usr/share/syslinux/gptmbr.bin of=$drive
+    mkdir -p /boot/extlinux/
+    extlinux --install /boot/extlinux/
 
 }
 

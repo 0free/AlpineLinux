@@ -896,9 +896,6 @@ enable_services() {
         rc-update add zfs.target sysinit
     fi
 
-    /sbin/modprobe ip_tables
-    echo 'IPFORWARD="yes"' > /etc/conf.d/iptables
-
 }
 
 configure_alpine() {

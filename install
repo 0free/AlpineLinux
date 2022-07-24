@@ -643,11 +643,8 @@ install_base() {
     echo 'nameserver 1.0.0.1' >> /mnt/etc/resolv.conf
     echo 'nameserver 8.8.8.8' >> /mnt/etc/resolv.conf
 
-    echo ">>> installing bash"
-    apk add --root=/mnt bash bash-completion
-
-    echo ">>> installing sudo"
-    apk add --root=/mnt sudo
+    echo ">>> installing toola"
+    apk add --root=/mnt sudo sed attr dialog bash bash-completion grep util-linux pciutils usbutils binutils findutils readline lsof less nano curl
 
     echo ">>> installing network packages"
     apk add --root=/mnt networkmanager iwd
@@ -767,9 +764,9 @@ disable_root() {
 
 set_locale() {
 
+    echo ">>> setting locale"
     setup-keymap 'us'
 
-    echo ">>> setting locale"
     if [[ ! $language ]]; then
         read -p " --- language en_US: " language
         set_locale
@@ -780,6 +777,8 @@ set_locale() {
         fi
     done
 
+    sed -i 's/#unicode="NO"/#unicode="NO"\nunicode="YES"/' /etc/rc.conf
+
 }
 
 setup_desktop() {
@@ -789,13 +788,7 @@ setup_desktop() {
     echo ">>> packages list"
     packages_list
 
-    update_packages
-
     install_packages
-
-    faillock --user $USER --reset
-
-    clean_packages
 
     enable_services
 
@@ -814,7 +807,9 @@ setup_desktop() {
     fi
 
     firmware_update
+
     install_mkinitfs
+
     finish
 
 }
@@ -846,13 +841,6 @@ install_packages() {
     done
     echo ">>> installing packages"
     apk add $list
-
-}
-
-clean_packages() {
-
-    echo ">>> cleaning packages cache"
-    apk cache clean
 
 }
 

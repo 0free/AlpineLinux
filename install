@@ -941,18 +941,23 @@ create_swap_file() {
         if ! zfs get volsize rpool/swap; then
             zfs create -V $swapfile -b 8192 -o compression=zle \
             -o logbias=throughput -o sync=always -o primarycache=metadata \
-            -o secondarycache=none -o com.sun:auto-snapshot=false rpool/swap
-            mkswap -f rpool/swap
-            swapon rpool/swap
+            -o com.sun:auto-snapshot=false rpool/swap
+            mkswap /dev/zvol/rpool/swap
+            swapon /dev/zvol/rpool/swap
         fi
     else
         if [[ ! -f /swapfile ]]; then
             dd if=/dev/zero of=/swapfile bs=1M count=$swapfile status=progress
-            chmod 0600 /swapfile
-            mkswap -f /swapfile
-            swapon /swapfile
         fi
-        if ! grep -q swapfile /etc/fstab; then
+        chmod 0600 /swapfile
+        mkswap /swapfile
+        swapon /swapfile
+    fi
+
+    if ! grep -q swap /etc/fstab; then
+        if grep -q zfs /etc/fstab; then
+            echo -e '/dev/zvol/rpool/swap none swap discard 0 0' >> /etc/fstab
+        else
             echo -e '/swapfile none swap sw 0 0' >> /etc/fstab
         fi
     fi

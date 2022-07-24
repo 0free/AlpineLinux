@@ -55,7 +55,7 @@ packages_list() {
         wireplumper
         sof-bin sof-firmware sof-tools
         # firmware
-        fwupd fwupd-efi
+        fwupd fwupd-efi fwupd-plugin-bios fwupd-plugin-cpu fwupd-plugin-tpm fwupd-plugin-nvme fwupd-plugin-ata
         # trackpad
         xf86-input-synaptics xf86-input-mtrack
         # browser
@@ -95,7 +95,7 @@ packages_list() {
 
     if grep -q zfs /etc/fstab; then
         PACKAGE+=(
-            zfs
+            zfs-lts zfs zfs-openrc zfs-libs
         )
     fi
 
@@ -188,7 +188,7 @@ packages_list() {
             # fonts tools
             font-manager font-viewer
             # fonts
-            terminus-font ttf-inconsolata ttf-dejavu font-bitstream-* font-noto font-noto-cjk ttf-font-awesome font-arabic-misc font-noto-arabic font-noto-armenian font-noto-cherokee font-noto-devanagari font-noto-ethiopic font-noto-georgian tt-droid font-inter font-opensans ttf-freefont font-roboto-mono font-roboto-flex
+            terminus-font ttf-inconsolata ttf-dejavu font-bitstream-* font-noto font-noto-cjk ttf-font-awesome font-arabic-misc font-noto-arabic font-noto-armenian font-noto-cherokee font-noto-devanagari font-noto-ethiopic font-noto-georgian tt-droid font-inter font-opensans ttf-freefont font-roboto font-roboto-mono font-roboto-flex
             # vulkan
             vulkan-headers vulkan-loader vulkan-validation-layers vulkan-tools
             # google
@@ -804,7 +804,11 @@ setup_desktop() {
 
 install_linux() {
 
-    list=' linux-edge'
+    if grep -q zfs /etc/fstab; then
+        list=' linux-lts'
+    else
+        list=' linux-edge'
+    fi
     list+=' linux-firmware-intel linux-firmware-i915'
     list+=' linux-firmware-amd linux-firmware-amd-ucode'
     list+=' linux-firmware-nvidia'

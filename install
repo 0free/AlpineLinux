@@ -687,7 +687,7 @@ change_root() {
     echo ">>> changing root"
     mount --bind /dev /mnt/dev
     mount --bind /sys /mnt/sys
-    chroot /mnt /mnt/bin/bash /mnt/root/install
+    chroot /mnt /bin/bash /root/install
 
 }
 

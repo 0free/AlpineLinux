@@ -657,7 +657,7 @@ set_fstab() {
     uuid=$(lsblk -dno UUID $root_drive)
     echo $uuid > /mnt/root/chroot
 
-    if [[ $filesystem != 'zfs']]; then
+    if [[ $filesystem != 'zfs' ]]; then
         echo "UUID=$uuid / $filesystem ssd,nofail,rw,discard,noatime,commit=64,autodefrag,compress=zstd:10 0 0" >> /mnt/etc/fstab
     fi
 

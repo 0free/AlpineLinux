@@ -461,7 +461,7 @@ setup_drive() {
         fi
     fi
 
-    filesystems=(btrfs ext4 xfs zfs)
+    filesystems=(btrfs ext4 exfat ntfs xfs zfs)
     menu 'select a filesystem' filesystem ${filesystems[@]}
 
     computers=(minimal miner server workstation)
@@ -511,6 +511,10 @@ setup_drive() {
         mkfs.btrfs -f -L ROOT $root_drive
     elif [[ $filesystem == 'ext4' ]]; then
         mkfs.ext4 -f -L ROOT $root_drive
+    elif [[ $filesystem == 'exfat' ]]; then
+        mkfs.exfat -f -L ROOT $root_drive
+    elif [[ $filesystem == 'ntfs' ]]; then
+        mkfs.ntfs -f -C -L ROOT $root_drive
     elif [[ $filesystem == 'xfs' ]]; then
         mkfs.xfs -f -L ROOT $root_drive
     fi
@@ -623,8 +627,11 @@ install_base() {
 
     update_packages
 
-    echo ">>> adding repositories"
+    echo ">>> installing alpine-base"
     apk add --root=/mnt --initdb alpine-base --keys-dir /etc/apk/keys --repositories-file /etc/apk/repositories
+
+    echo ">>> deleting fstab"
+    rm /mnt/etc/fstab
 
     echo ">>> copying repositories"
     cp /etc/apk/repositories /mnt/etc/apk/repositories
@@ -633,11 +640,11 @@ install_base() {
     echo 'nameserver 1.0.0.1' >> /mnt/etc/resolv.conf
     echo 'nameserver 8.8.8.8' >> /mnt/etc/resolv.conf
 
-    echo ">>> installing alpine-base"
-    apk add --root=/mnt alpine-base
-
     echo ">>> installing network packages"
     apk add --root=/mnt networkmanager iwd
+
+    echo ">>> installing compression packages"
+    apk add --root=/mnt zstd lzo lz4
 
     set_fstab
 
@@ -646,18 +653,19 @@ install_base() {
 set_fstab() {
 
     echo ">>> setting fstab"
-    genfstab -U -p /mnt >> /mnt/etc/fstab
-
-    if grep -q zfs /mnt/etc/fstab; then
-        sed -i 's|^rpool|#rpool|g' /mnt/etc/fstab
-    fi
-
-    sed -i 's|relatime,space_cache=v2|noatime,compress=zstd:1,ssd,discard=async|g' /mnt/etc/fstab
-
-    echo "/EFI /boot none defaults,bind 0 0" >> /mnt/etc/fstab
 
     uuid=$(lsblk -dno UUID $root_drive)
     echo $uuid > /mnt/root/chroot
+
+    if [[ $filesystem != 'zfs']]; then
+        echo "UUID=$uuid / $filesystem ssd,nofail,rw,discard,noatime,commit=64,autodefrag,compress=zstd:10 0 0" >> /mnt/etc/fstab
+    fi
+
+    uuid=$(lsblk -dno UUID $boot_drive)
+    echo "UUID=$uuid /boot vfat ssd,rw,discard,noatime 0 0" >> /mnt/etc/fstab
+
+    echo "/EFI /boot none ssd,rw,discard,noatime,bind 0 0" >> /mnt/etc/fstab
+
     echo $computer > /mnt/root/computer
     echo $desktop > /mnt/root/desktop
     change_root

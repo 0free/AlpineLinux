@@ -624,7 +624,7 @@ install_base() {
     update_packages
 
     echo ">>> adding repositories"
-    apk add --root=/mnt --keys-dir /etc/apk/keys --repositories-file /etc/apk/repositories
+    apk add --root=/mnt --initdb alpine-base --keys-dir /etc/apk/keys --repositories-file /etc/apk/repositories
 
     echo ">>> copying repositories"
     cp /etc/apk/repositories /mnt/etc/apk/repositories

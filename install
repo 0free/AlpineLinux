@@ -32,7 +32,7 @@ packages_list() {
         # efi boot
         efibootmgr secureboot-hook kernel-hooks
         # base
-        build-base busybox fakeroot sudo rsyslog which dialog curl wget
+        sudo bash bash-completion build-base fakeroot rsyslog sed attr dialog which grep util-linux pciutils usbutils binutils findutils readline lsof less nano curl wget
         # gnu
         coreutils grep gawk findutils diffutils
         # bash
@@ -643,7 +643,7 @@ install_base() {
     echo 'nameserver 1.0.0.1' >> /mnt/etc/resolv.conf
     echo 'nameserver 8.8.8.8' >> /mnt/etc/resolv.conf
 
-    echo ">>> installing toola"
+    echo ">>> installing tools"
     apk add --root=/mnt sudo sed attr dialog bash bash-completion grep util-linux pciutils usbutils binutils findutils readline lsof less nano curl
 
     echo ">>> installing network packages"

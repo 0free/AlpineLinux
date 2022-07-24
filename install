@@ -1082,6 +1082,7 @@ clear && set -e
 
 if [[ -f /root/chroot ]]; then
     uuid=$(cat /root/chroot)
+    drive=$(cat /root/drive)
     computer=$(cat /root/computer)
     desktop=$(cat /root/desktop)
     if [ $(find /home -maxdepth 1 -type d | wc -l) -ne 1 ]; then

@@ -16,7 +16,7 @@ packages_list() {
         # micro-codes
         amd-ucode intel-ucode
         # desktop
-        musl-lang
+        musl-locales
         xorg-server xdg-desktop-portal xf86-input-libinput eudev
         elogind
         dbus dbus-x11
@@ -46,7 +46,7 @@ packages_list() {
         # firewall
         gufw ufw ufw-bash-completion iptables ipset
         # wireless
-        wireless_tools iwd
+        wireless-regdb wireless-tools iwd iwd-openrc
         # audio
         alsa-utils alsa-lib alsaconf alsa-ucm-conf
         pipewire pipewire-alsa pipewire-tools pipewire-pulse

@@ -644,7 +644,7 @@ install_base() {
     echo 'nameserver 8.8.8.8' >> /mnt/etc/resolv.conf
 
     echo ">>> installing tools"
-    apk add --root=/mnt sudo sed attr dialog bash bash-completion grep util-linux pciutils usbutils binutils findutils readline lsof less nano curl
+    apk add --root=/mnt sudo bash bash-completion
 
     echo ">>> installing network packages"
     apk add --root=/mnt networkmanager iwd

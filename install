@@ -56,7 +56,7 @@ packages_list() {
         # bluetooth
         bluez-alsa bluez-alsa-openrc bluez-alsa-utils
         # firmware
-        fwupd fmupd-openrc fwupd-efi fwupd-plugin-bios fwupd-plugin-cpu fwupd-plugin-tpm fwupd-plugin-nvme fwupd-plugin-ata
+        fwupd fwupd-openrc fwupd-efi fwupd-plugin-bios fwupd-plugin-cpu fwupd-plugin-tpm fwupd-plugin-nvme fwupd-plugin-ata
         # trackpad
         xf86-input-synaptics xf86-input-mtrack
         # browser

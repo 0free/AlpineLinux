@@ -711,8 +711,8 @@ set_host() {
     read -p " --> hostname: " HOSTNAME
     echo "$HOSTNAME" > /etc/hostname
 
-    echo "127.0.0.1 localhost.localdomain localhost $hostname.localdomain $hostname" > /etc/hosts
-    echo "::1       localhost.localdomain localhost $hostname.localdomain $hostname" >> /etc/hosts
+    echo "127.0.0.1 localhost localhost.localdomain $hostname.localdomain $hostname" > /etc/hosts
+    echo "::1       localhost localhost.localdomain $hostname.localdomain $hostname" >> /etc/hosts
 
 }
 
@@ -780,7 +780,7 @@ set_locale() {
         fi
     done
 
-    sed -i 's/#unicode="NO"/#unicode="NO"\nunicode="YES"/' /etc/rc.conf
+    sed -i 's|#unicode="NO"|unicode="YES"|' /etc/rc.conf
 
 }
 
@@ -794,6 +794,8 @@ setup_desktop() {
     install_packages
 
     enable_services
+
+    configure_alpine
 
     if ! grep -qEw "custom commands" "/home/$USER/.bashrc"; then
         add_commands
@@ -891,18 +893,17 @@ enable_services() {
 
     if grep -q zfs /etc/fstab; then
         echo ">>> enabling ZFS services"
-        rc-update add zfs-import-cache sysinit
-        rc-update add zfs-import-scan sysinit
+        rc-update add zfs-import sysinitt
         rc-update add zfs-mount sysinit
         rc-update add zfs-share sysinit
         rc-update add zfs-zed sysinit
-        rc-update add zfs.target sysinit
     fi
 
 }
 
 configure_alpine() {
 
+    echo ">>> configuring alpine"
     if [ ! -d /etc/pipewire ]; then
         mkdir /etc/pipewire
     fi
@@ -919,7 +920,7 @@ add_commands() {
         echo "eval $(starship init bash)" >> /home/$USER/.bashrc
     fi
 
-    echo ">>> adding bash aliases"
+    echo ">>> adding bashrc"
     echo "# custom commands" >> /home/$USER/.bashrc
     echo "alias search='sudo apk search'" >> /home/$USER/.bashrc
     echo "alias install='sudo apk add'" >> /home/$USER/.bashrc
@@ -931,7 +932,7 @@ add_commands() {
 
     echo "alias fwupd='fwupdmgr get-devices && fwupdmgr refresh && fwupdmgr get-updates && fwupdmgr update'" >> /home/$USER/.bashrc
 
-    echo "alis youtube='yt-dlp -o \"~/%(title)s.%(ext)s\" -f \"bv[vcodec~=\"^((he|a)vc|h26[45])\"][height<=1080][fps<=60]+ba\" --merge-output-format mp4 --downloader ffmpeg --external-downloader ffmpeg --external-downloader-args ffmpeg:\"-ss 00:00:00 -to 00:00:00\"'" >> /home/$USER/.bashrc
+    echo "alias youtube='yt-dlp -o \"~/%(title)s.%(ext)s\" -f \"bv[vcodec~=\"^((he|a)vc|h26[45])\"][height<=1080][fps<=60]+ba\" --merge-output-format mp4 --downloader ffmpeg --external-downloader ffmpeg --external-downloader-args ffmpeg:\"-ss 00:00:00 -to 00:00:00\"'" >> /home/$USER/.bashrc
 
 }
 

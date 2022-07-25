@@ -974,7 +974,7 @@ create_swap_file() {
 install_syslinux() {
 
     echo ">>> installing syslinux"
-    apk add --root=/mnt syslinux
+    apk add syslinux
     dd bs=440 count=1 conv=notrunc if=/usr/share/syslinux/gptmbr.bin of=$drive
     mkdir -p /boot/extlinux/
     extlinux --install /boot/extlinux/

@@ -1055,7 +1055,7 @@ install_mkinitfs() {
     echo "features="$list"" > /etc/mkinitfs/mkinitfs.conf
 
     echo ">>> building initial ramdisk"
-    mkinitfs -c /etc/mkinitfs/mkinitfs.conf -b / modules="$list"
+    mkinitfs -c /etc/mkinitfs/mkinitfs.conf
 
 }
 

@@ -451,6 +451,8 @@ setup_drive() {
     mount_root
     mount_boot
 
+    add_files
+
     install_base
 
 }
@@ -534,6 +536,15 @@ set_zfs() {
     echo "options zfs zfs_vdev_sync_write_max_active=32" >> /mnt/etc/modprobe.d/zfs.conf
     echo "options zfs zfs_vdev_sync_read_min_active=8" >> /mnt/etc/modprobe.d/zfs.conf
     echo "options zfs zfs_vdev_sync_read_max_active=32" >> /mnt/etc/modprobe.d/zfs.conf
+
+}
+
+add_files() {
+
+    echo $drive > /mnt/root/drive
+    echo $computer > /mnt/root/computer
+    echo $desktop > /mnt/root/desktop
+    echo $bootloader > /mnt/root/bootloader
 
 }
 
@@ -634,10 +645,6 @@ set_fstab() {
 
     echo "/EFI /boot none ssd,rw,discard,noatime,bind 0 0" >> /mnt/etc/fstab
 
-    echo $drive > /mnt/root/drive
-    echo $computer > /mnt/root/computer
-    echo $desktop > /mnt/root/desktop
-    echo $bootloader > /mnt/root/bootloader
     change_root
 
 }

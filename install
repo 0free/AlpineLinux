@@ -1052,7 +1052,7 @@ install_mkinitfs() {
     echo $list
 
     echo ">>> configuring mkinitfs"
-    echo "features="$list"" > /etc/mkinitfs/mkinitfs.conf
+    echo "features=\"$list\"" > /etc/mkinitfs/mkinitfs.conf
 
     echo ">>> building initial ramdisk"
     mkinitfs -c /etc/mkinitfs/mkinitfs.conf

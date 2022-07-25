@@ -116,7 +116,7 @@ packages_list() {
             # gnome theme
             arc-theme arc-dark arc-dark-gnome papirus-icon-theme
             # gedit spell check
-            aspell hspell hunspell nuspell libvoikko
+            aspell hunspell nuspell
             # network
             networkmanager networkmanager-openrc networkmanager-common networkmanager-bash-completion networkmanager-elogind networkmanager-wwan networkmanager-wifi networkmanager-bluetooth networkmanager-openvpn network-manager-applet networkmanager-initrd-generator
         )
@@ -189,7 +189,7 @@ packages_list() {
             # fonts tools
             font-manager font-viewer
             # fonts
-            terminus-font ttf-inconsolata ttf-dejavu font-bitstream-* font-noto font-noto-cjk ttf-font-awesome font-arabic-misc font-noto-arabic font-noto-armenian font-noto-cherokee font-noto-devanagari font-noto-ethiopic font-noto-georgian tt-droid font-inter font-opensans ttf-freefont font-roboto font-roboto-mono font-roboto-flex
+            terminus-font ttf-inconsolata ttf-dejavu font-noto font-noto-cjk ttf-font-awesome font-arabic-misc font-noto-arabic font-noto-armenian font-noto-cherokee font-noto-devanagari font-noto-ethiopic font-noto-georgian ttf-droid ttf-droid-nonlatin font-inter font-opensans ttf-freefont font-roboto font-roboto-mono font-roboto-flex
             # vulkan
             vulkan-headers vulkan-loader vulkan-validation-layers vulkan-tools
             # google
@@ -211,7 +211,7 @@ packages_list() {
             # JavaScript
             npm nodejs esbuild reason
             # code
-            code-oss stylelint lapce codeblocks geany
+            code-oss lapce codeblocks geany
             # code format
             prettier tidyhtml
             # html/css to pdf
@@ -220,8 +220,6 @@ packages_list() {
             flameshot
             # electronic
             kicad
-            # plan
-            minder
             # screen
             obs-studio kooha peek
             # video
@@ -233,9 +231,9 @@ packages_list() {
             # driver
             xinput gkraken ccid solaar razercfg razercfg-gui razergenie
             # math
-            geogebra sagemath mathjax2 octave
+            mathjax2
             # finance
-            homebank kresus
+            homebank
             # 2d
             tiled
             # 3d
@@ -244,24 +242,18 @@ packages_list() {
             cura
             # text editor
             kakoune
-            # TypeScript
-            typescript
-            # tensorflow
-            tensorflow tensorboard
             # mauikit
             mauikit mauikit-accounts mauikit-filebrowsing mauikit-imagetools mauikit-texteditor
             # bitcoin
             bitcoin bitcoin-openrc
             # game emu
             pcsx2 dolphin-emu xwiimote pcsxr
-            # java
-            jdk-openjdk
             # rust
             rust rustfmt rust-analysis cargo
             # go
             go
             # php
-            composer php82 php82-bcmath php82-bz2 php82-cgi php82-curl php82-common php82-phpdbg php82-dom php82-exif php82-fileinfo php82-fpm php82-gd php82-gettext php82-iconv php82-intl php82-litespeed php82-mbstring php-memcache php-memcached php82-mysqli php82-mysqlnd php82-opcache php82-phar php82-pear php-redis php82-session php82-snmp php82-soap php82-xml php82-zip
+            composer php82 php82-bcmath php82-bz2 php82-cgi php82-curl php82-common php82-phpdbg php82-dom php82-exif php82-fileinfo php82-fpm php82-gd php82-gettext php82-iconv php82-intl php82-litespeed php82-mbstring php82-memcache php82-memcached php82-mysqli php82-mysqlnd php82-opcache php82-phar php82-pear php82-redis php82-session php82-snmp php82-soap php82-xml php82-zip
             # android
             gradle android-tools android-tools-bash-completion go-mtpfs gvfs-mtp scrcpy scrcpy-bash-completion
             # iPhone/iPod/mac
@@ -285,7 +277,7 @@ packages_list() {
             # music server
             navidrome navidrome-openrc
             # youtube
-            ffmpeg yt-dlp pipe-viewer-gtk audiotube freetube tartube youtube-viewer-gtk
+            ffmpeg yt-dlp pipe-viewer-gtk audiotube tartube youtube-viewer-gtk
             # javascript/css
             minify
             # photos

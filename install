@@ -677,6 +677,7 @@ set_fstab() {
     echo $drive > /mnt/root/drive
     echo $computer > /mnt/root/computer
     echo $desktop > /mnt/root/desktop
+    echo $bootloader > /mnt/root/bootloader
     change_root
 
 }
@@ -1097,6 +1098,7 @@ if [[ -f /root/chroot ]]; then
     drive=$(cat /root/drive)
     computer=$(cat /root/computer)
     desktop=$(cat /root/desktop)
+    bootloader=$(cat /root/bootloader)
     if [ $(find /home -maxdepth 1 -type d | wc -l) -ne 1 ]; then
         USER=$(ls /home)
         if [[ -f /root/desktop ]]; then

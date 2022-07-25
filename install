@@ -17,22 +17,22 @@ packages_list() {
         amd-ucode intel-ucode
         # desktop
         musl-locales
-        xorg-server xdg-desktop-portal xf86-input-libinput eudev
+        xorg-server xdg-desktop-portal xf86-input-libinput eudev eudev-openrc
         elogind
-        dbus dbus-x11
+        dbus dbus-openrc dbus-x11
         mesa mesa-dri-gallium
         # wayland
         xwayland
         # network
-        ethtool rsync
+        ethtool rsync rsync-openrc
         # cpu
-        cpupower
+        cpupower cpupower-openrc
         # hardware
         bolt pciutils lm-sensors tpm2-tools
         # efi boot
         efibootmgr secureboot-hook kernel-hooks
         # base
-        sudo bash bash-completion build-base fakeroot rsyslog sed attr dialog which grep util-linux pciutils usbutils binutils findutils readline lsof less nano curl wget
+        sudo bash bash-completion build-base fakeroot rsyslog rsyslog-openrc sed attr dialog which grep util-linux util-linux-openrc pciutils usbutils binutils findutils readline lsof less nano curl wget
         # gnu
         coreutils grep gawk findutils diffutils
         # bash
@@ -44,19 +44,19 @@ packages_list() {
         # disks
         e2fsprogs lvm2 os-prober gptfdisk dosfstools mtools ntfs-3g ntfs-3g-progs btrfs-progs xfsprogs hfsprogs exfatprogs f2fs-tools udftools sgdisk udisks2 mmc-utils jfsutils
         # firewall
-        gufw ufw ufw-bash-completion iptables ipset
+        gufw ufw ufw-openrc ufw-bash-completion iptables iptables-openrc ipset ipset-openrc
         # wireless
         wireless-regdb wireless-tools iwd iwd-openrc
         # audio
-        alsa-utils alsa-lib alsaconf alsa-ucm-conf
+        alsa-utils alsa-utils-openrc alsa-lib alsaconf alsa-ucm-conf
         pipewire pipewire-alsa pipewire-tools pipewire-pulse
         pipewire-spa-bluez pipewire-spa-vulkan easyeffects
         wireplumber
         sof-bin sof-firmware sof-tools
         # bluetooth
-        bluez-alsa bluez-alsa-utils
+        bluez-alsa bluez-alsa-openrc bluez-alsa-utils
         # firmware
-        fwupd fwupd-efi fwupd-plugin-bios fwupd-plugin-cpu fwupd-plugin-tpm fwupd-plugin-nvme fwupd-plugin-ata
+        fwupd fmupd-openrc fwupd-efi fwupd-plugin-bios fwupd-plugin-cpu fwupd-plugin-tpm fwupd-plugin-nvme fwupd-plugin-ata
         # trackpad
         xf86-input-synaptics xf86-input-mtrack
         # browser
@@ -104,7 +104,7 @@ packages_list() {
 
         PACKAGES+=(
             # gnome session
-            gdm mutter xdg-desktop-portal-gtk xdg-desktop-portal-gnome gnome-desktop gnome-desktop-lang gnome-session gnome-shell-extensions gnome-shell-schemas gnome-control-center gnome-control-center-bash-completion gnome-tweaks gnome-menus chrome-gnome-shell gsettings-desktop-schemas udisks2-bash-completion tracker-bash-completion gpaste-gnome pinentry-gnome clutter clutter-gst clutter-gtk
+            gdm gdm-openrc mutter xdg-desktop-portal-gtk xdg-desktop-portal-gnome gnome-desktop gnome-desktop-lang gnome-session gnome-shell-extensions gnome-shell-schemas gnome-control-center gnome-control-center-bash-completion gnome-tweaks gnome-menus chrome-gnome-shell gsettings-desktop-schemas udisks2-bash-completion tracker-bash-completion gpaste-gnome pinentry-gnome clutter clutter-gst clutter-gtk
             # gnome tools
             adwaita-icon-theme gnome-keyring gnome-console gnome-terminal gnome-disk-utility gnome-system-monitor file-roller
             # nautilus
@@ -118,7 +118,7 @@ packages_list() {
             # gedit spell check
             aspell hspell hunspell nuspell libvoikko
             # network
-            networkmanager networkmanager-common networkmanager-bash-completion networkmanager-elogind networkmanager-wwan networkmanager-wifi networkmanager-bluetooth networkmanager-openvpn network-manager-applet networkmanager-initrd-generator
+            networkmanager networkmanager-openrc networkmanager-common networkmanager-bash-completion networkmanager-elogind networkmanager-wwan networkmanager-wifi networkmanager-bluetooth networkmanager-openvpn network-manager-applet networkmanager-initrd-generator
         )
 
     fi
@@ -126,7 +126,7 @@ packages_list() {
     if [[ $desktop == 'kde' ]]; then
 
         PACKAGES+=(
-            xdg-desktop-portal-kde sddm sddm-kcm sddm-breeze plasma plasma-integration plasma-desktop plasma-workspace breeze kwin kinit kwayland kwayland-integration kdeplasma-addons kinfocenter kmenuedit dolphin dolphin-plugins konsole systemsettings kde-gtk-config discover kactivities kscreen kmenuedit bluedevil powerdevil kdecoration plasma-systemmonitor plasma-firewall plasma-pa plasma-nm
+            xdg-desktop-portal-kde sddm sddm-openrc sddm-kcm sddm-breeze plasma plasma-integration plasma-desktop plasma-workspace breeze kwin kinit kwayland kwayland-integration kdeplasma-addons kinfocenter kmenuedit dolphin dolphin-plugins konsole systemsettings kde-gtk-config discover kactivities kscreen kmenuedit bluedevil powerdevil kdecoration plasma-systemmonitor plasma-firewall plasma-pa plasma-nm
         )
 
     fi
@@ -229,7 +229,7 @@ packages_list() {
             # photos
             krita gimp inkscape gmic curtail
             # printer
-            cups cups-pdf bluez-cups
+            cups cups-openrc cups-pdf bluez-cups
             # driver
             xinput gkraken ccid solaar razercfg razercfg-gui razergenie
             # math
@@ -253,7 +253,7 @@ packages_list() {
             # mauikit
             mauikit mauikit-accounts mauikit-filebrowsing mauikit-imagetools mauikit-texteditor
             # bitcoin
-            bitcoin
+            bitcoin bitcoin-openrc
             # game emu
             pcsx2 dolphin-emu xwiimote pcsxr
             # java
@@ -372,7 +372,7 @@ packages_list() {
 
         PACKAGES+=(
             # system
-            rsyslog-mysql rsyslog-tls rsyslog-http
+            rsyslog rsyslog-openrc rsyslog-mysql rsyslog-tls rsyslog-http
             # SSL/TLS
             certbot
             # php 8.1.7
@@ -382,14 +382,14 @@ packages_list() {
             # database
             mariadb
             # mail
-            postfix postfix-mysql postfix-pcre postfixadmin
-            dovecot dovecot-submissiond dovecot-lmtpd dovecot-pop3d dovecot-sql dovecot-mysql
+            postfix postfix-openrc postfix-mysql postfix-pcre postfixadmin
+            dovecot dovecot-openrc dovecot-submissiond dovecot-lmtpd dovecot-pop3d dovecot-sql dovecot-mysql
             opendkim opendkim-utils
             cyrus-sasl
             # tools
-            imagemagick
+            imagemagick redis redis-openrc memcached memcached-openrc
             # server
-            litespeed
+            litespeed litespeed-openrc
             # http
             hetty
             # cab

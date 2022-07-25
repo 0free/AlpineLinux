@@ -1048,9 +1048,6 @@ install_mkinitfs() {
         list+=' '
     done
 
-    echo $modules
-    echo $list
-
     echo ">>> configuring mkinitfs"
     echo "features=\"$list\"" > /etc/mkinitfs/mkinitfs.conf
 

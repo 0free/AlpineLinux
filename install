@@ -924,7 +924,7 @@ add_commands() {
     echo "# custom commands" >> /home/$USER/.bashrc
     echo "alias search='sudo apk search'" >> /home/$USER/.bashrc
     echo "alias install='sudo apk add'" >> /home/$USER/.bashrc
-    echo "alias update='sudo apk update && apk upgrade --available'" >> /home/$USER/.bashrc
+    echo "alias update='sudo apk update && sudo apk upgrade'" >> /home/$USER/.bashrc
     echo "alias remove='sudo apk del'" >> /home/$USER/.bashrc
     echo "alias c='clear'" >> /home/$USER/.bashrc
     echo "alias edit='SUDO_EDITOR=gedit sudoedit'" >> /home/$USER/.bashrc
@@ -1068,7 +1068,7 @@ finish() {
     else
         umount -l /mnt
     fi
-    reboot -f
+    reboot
 
 }
 

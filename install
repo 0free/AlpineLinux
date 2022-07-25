@@ -504,9 +504,6 @@ setup_drive() {
 
     echo ">>> creating root filesystem"
     if [[ $filesystem == 'zfs' ]]; then
-        if ! test sgdisk; then
-            echo ">>> installing ZFS"
-        fi
         create_zfs
     elif [[ $filesystem == 'btrfs' ]]; then
         mkfs.btrfs -f -L ROOT $root_drive

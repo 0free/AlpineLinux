@@ -462,16 +462,16 @@ setup_drive() {
         fi
     fi
 
-    filesystems=(btrfs ext4 exfat ntfs xfs zfs)
+    filesystems=(zfs btrfs ext4 exfat ntfs xfs)
     menu 'select a filesystem' filesystem ${filesystems[@]}
 
-    computers=(minimal miner server workstation)
+    computers=(workstation minimal miner server)
     menu 'select a computer' computer ${computers[@]}
 
     desktops=(gnome kde kde-mobile cinnamon)
     menu 'select a desktop' desktop ${desktops[@]}
 
-    bootloaders=(syslinux grub)
+    bootloaders=(grub syslinux)
     menu 'select a desktop' bootloader ${bootloaders[@]}
 
     if ! test sgdisk; then

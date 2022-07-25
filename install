@@ -541,7 +541,7 @@ create_zfs() {
     zpool create -f -o ashift=12 -o autotrim=on -O recordsize=8192 \
     -O compression=lz4 -O acltype=posixacl \
     -O devices=off -O xattr=sa -O relatime=off -O atime=off \
-    -O dnodesize=auto -O normalization=formD \
+    -O dnodesize=legacy -O normalization=formD \
     -O canmount=off -O mountpoint=/ -R /mnt rpool $root_drive
     echo ">>> checking ZFS pool"
     zpool status
@@ -550,7 +550,10 @@ create_zfs() {
 
 mount_root() {
 
-    if [[ $filesystem != 'zfs' ]]; then
+    if [[ $filesystem == 'zfs' ]]; then
+        echo ">>> importing zpool"
+        zpool import rpool -d $root_drive -R /mnt
+    else
         echo ">>> mounting root drive"
         mount $root_drive /mnt
     fi
@@ -574,7 +577,7 @@ mount_boot() {
 set_zfs() {
 
     echo ">>> setting ZFS pool as rootfs"
-    zpool set bootfs=rpool/ rpool
+    zpool set bootfs=rpool rpool
     echo ">>> setting ZFS cache"
     zpool set cachefile=/etc/zfs/zpool.cache rpool
     mkdir -p /mnt/etc/zfs

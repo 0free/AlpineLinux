@@ -556,10 +556,7 @@ mount_root() {
     echo ">>> mounting root drive"
     if [[ $filesystem == 'zfs' ]]; then
         echo ">>> importing ZFS"
-        zpool import rpool -d $root_drive -R /mnt -N
-        echo ">>> mounting ZFS dataset"
-        zfs mount rpool
-        zfs mount -a
+        zpool import rpool -d $root_drive -R /mnt
     else
         mount $root_drive /mnt
     fi

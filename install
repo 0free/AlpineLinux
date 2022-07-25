@@ -469,7 +469,7 @@ create_zfs() {
     -O compression=lz4 -O acltype=posixacl \
     -O devices=off -O xattr=sa -O relatime=off -O atime=off \
     -O dnodesize=legacy -O normalization=formD \
-    -O canmount=off -O mountpoint=/ -R /mnt rpool $root_drive
+    -O canmount=noauto -O mountpoint=/ -R /mnt rpool $root_drive
     echo ">>> checking ZFS pool"
     zpool status
 
@@ -1014,6 +1014,8 @@ else
     if mountpoint -q /mnt; then
         if [[ -f /mnt/etc/fstab ]]; then
             change_root
+        elif [[ -f /mnt/boot/initramfs-* ]]; then
+            install_packages
         else
             install_base
         fi

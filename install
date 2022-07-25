@@ -842,8 +842,6 @@ setup_desktop() {
         install_grub
     fi
 
-    firmware_update
-
     install_mkinitfs
 
     finish
@@ -1022,26 +1020,9 @@ install_grub() {
 
 }
 
-firmware_update() {
-
-    echo ">>> configuring fwupd"
-    if [[ ! -d /etc/dbus-1/ ]]; then
-        mkdir /etc/dbus-1/
-    fi
-
-    cat <<EOF > /etc/dbus-1/system-local.conf
-<busconfig>
-    <includedir>/usr/local/etc/dbus-1/system.d</includedir>
-</busconfig
-EOF
-
-}
-
-
 install_mkinitfs() {
 
     echo ">>> installing mkinitfs"
-    apk add mkinitfs
 
     modules=(base nvme ata usb keyboard)
     modules+=(usbhid xhci_hcd)
@@ -1068,7 +1049,7 @@ install_mkinitfs() {
     done
 
     echo ">>> configuring mkinitfs"
-    echo 'features="$list"' > /etc/mkinitfs/mkinitfs.conf
+    echo 'features="\$list"' > /etc/mkinitfs/mkinitfs.conf
 
     echo ">>> building initial ramdisk"
     mkinitfs -c /etc/mkinitfs/mkinitfs.conf -b / modules="$list"

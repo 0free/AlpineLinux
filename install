@@ -941,6 +941,9 @@ create_swap_file() {
 
     echo ">>> creating swap file"
 
+    udevadm trigger
+    mount -t proc proc /proc
+
     if grep -q zfs /etc/fstab; then
         if ! zfs get volsize rpool/swap; then
             zfs create -V $swapfile -b 8192 -o compression=zle \

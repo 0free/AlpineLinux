@@ -583,7 +583,7 @@ mount_boot() {
 set_zfs() {
 
     echo ">>> setting ZFS pool as rootfs"
-    zpool set bootfs=rpool rpool
+    zpool set bootfs=rpool/ rpool
     echo ">>> setting ZFS cache"
     zpool set cachefile=/etc/zfs/zpool.cache rpool
     mkdir -p /mnt/etc/zfs
@@ -892,9 +892,6 @@ enable_services() {
         echo ">>> enabling ZFS services"
         rc-update add zfs-import sysinit
         rc-update add zfs-mount sysinit
-        rc-update add zfs-share sysinit
-        rc-update add zfs-load-key sysinit
-        rc-update add zfs-zed sysinit
     fi
 
 }
@@ -1055,14 +1052,13 @@ install_mkinitfs() {
 finish() {
 
     echo ">>> un-mount & reboot"
-    if mountpoint -q /boot; then
-        umount -l /boot
-    fi
+    swapoff -a
+    umount /mnt/dev
+    umount /mnt/sys
+    umount -R /mnt
     if grep -q zfs /etc/fstab; then
         zfs umount -a
         zpool export rpool
-    else
-        umount -l /mnt
     fi
     reboot
 

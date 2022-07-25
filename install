@@ -505,6 +505,7 @@ setup_drive() {
     echo ">>> creating root filesystem"
     if [[ $filesystem == 'zfs' ]]; then
         create_zfs
+        set_zfs
     elif [[ $filesystem == 'btrfs' ]]; then
         mkfs.btrfs -f -L ROOT $root_drive
     elif [[ $filesystem == 'ext4' ]]; then
@@ -519,10 +520,6 @@ setup_drive() {
 
     mount_root
     mount_boot
-
-    if [[ $filesystem == 'zfs' ]]; then
-        set_zfs
-    fi
 
     install_base
 

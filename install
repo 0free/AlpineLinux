@@ -497,7 +497,7 @@ setup_drive() {
         boot_drive=$drive"1"
         root_drive=$drive"2"
         echo ">>> reading partition tables"
-        mdev -s && sleep 1
+        mdev -s
         echo ">>> creating boot filesystem"
         mkfs.vfat -F32 -n BOOT $boot_drive
     fi

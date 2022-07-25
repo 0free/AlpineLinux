@@ -73,7 +73,7 @@ packages_list() {
 
     if [[ $bootloaders == 'grub' ]]; then
         PACKAGES+=(
-            grub-efi grub grub-bash-completion
+            grub-efi grub-bash-completion
         )
     fi
 
@@ -177,7 +177,7 @@ packages_list() {
 
         PACKAGES+=(
             # bash
-            grub-bash-completion android-tools-bash-completion py3-pip-bash-completion npm-bash-completion git-bash-completion yt-dlp-bash-completion minify-bash-completion util-linux-bash-completion
+            android-tools-bash-completion py3-pip-bash-completion npm-bash-completion git-bash-completion yt-dlp-bash-completion minify-bash-completion util-linux-bash-completion
             # shell
             starship
             # wine
@@ -652,7 +652,44 @@ install_base() {
     echo ">>> installing compression packages"
     apk add --root=/mnt zstd lzo lz4
 
+    install_linux
+
+    echo ">>> packages list"
+    packages_list
+
+    install_packages
+
     set_fstab
+
+}
+
+install_linux() {
+
+    if grep -q zfs /etc/fstab; then
+        list=' linux-lts'
+    else
+        list=' linux-edge'
+    fi
+    list+=' linux-firmware-intel linux-firmware-i915'
+    list+=' linux-firmware-amd linux-firmware-amd-ucode'
+    list+=' linux-firmware-nvidia'
+    list+=' linux-firmware-amdgpu'
+    list+=' linux-firmware-other'
+    list+=' linux-firmware-rtlwifi linux-firmware-rtl_bt linux-firmware-rtl_nic'
+    echo ">>> installing linux"
+    apk add --root=/mnt $list
+
+}
+
+install_packages() {
+
+    list=''
+    for i in ${!PACKAGES[@]}; do
+        list+=' '
+        list+=${PACKAGES[$i]}
+    done
+    echo ">>> installing packages"
+    apk add --root=/mnt $list
 
 }
 
@@ -787,13 +824,6 @@ set_locale() {
 
 setup_desktop() {
 
-    install_linux
-
-    echo ">>> packages list"
-    packages_list
-
-    install_packages
-
     enable_services
 
     configure_alpine
@@ -817,36 +847,6 @@ setup_desktop() {
     install_mkinitfs
 
     finish
-
-}
-
-install_linux() {
-
-    if grep -q zfs /etc/fstab; then
-        list=' linux-lts'
-    else
-        list=' linux-edge'
-    fi
-    list+=' linux-firmware-intel linux-firmware-i915'
-    list+=' linux-firmware-amd linux-firmware-amd-ucode'
-    list+=' linux-firmware-nvidia'
-    list+=' linux-firmware-amdgpu'
-    list+=' linux-firmware-other'
-    list+=' linux-firmware-rtlwifi linux-firmware-rtl_bt linux-firmware-rtl_nic'
-    echo ">>> installing linux"
-    apk add $list
-
-}
-
-install_packages() {
-
-    list=''
-    for i in ${!PACKAGES[@]}; do
-        list+=' '
-        list+=${PACKAGES[$i]}
-    done
-    echo ">>> installing packages"
-    apk add $list
 
 }
 
@@ -998,8 +998,8 @@ install_grub() {
         sed -i 's|^GRUB_PRELOAD_MODULES=".*"|GRUB_PRELOAD_MODULES="usb usb_keyboard part_gpt nvme"|' /etc/default/grub
     fi
 
-    if [[ -d /boot/grub/themes/starfield ]]; then
-        rm -r /boot/grub/themes/starfield
+    if [[ ! -d /boot/grub/themes ]]; then
+        mkdir /boot/grub/themes
     fi
 
     if [[ ! -d /boot/grub/themes/grub-theme ]]; then

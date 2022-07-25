@@ -542,7 +542,7 @@ create_zfs() {
     -O compression=lz4 -O acltype=posixacl \
     -O devices=off -O xattr=sa -O relatime=off -O atime=off \
     -O dnodesize=auto -O normalization=formD \
-    -O canmount=noauto -O mountpoint=/ -R /mnt rpool $root_drive
+    -O canmount=off -O mountpoint=/ -R /mnt rpool $root_drive
     echo ">>> checking ZFS pool"
     zpool status
 
@@ -550,11 +550,11 @@ create_zfs() {
 
 mount_root() {
 
-    echo ">>> mounting root drive"
     if [[ $filesystem == 'zfs' ]]; then
-        echo ">>> importing ZFS"
+        echo ">>> importing zpool"
         zpool import rpool -d $root_drive -R /mnt
     else
+        echo ">>> mounting root drive"
         mount $root_drive /mnt
     fi
 

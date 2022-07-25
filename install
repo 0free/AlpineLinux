@@ -1007,13 +1007,12 @@ install_grub() {
         cd /root
     fi
 
-    sed -i 's/GRUB_TIMEOUT=5/GRUB_TIMEOUT=1/' /etc/default/grub
-    sed -i 's/loglevel=3/loglevel=0/' /etc/default/grub
-    sed -i 's|#GRUB_BACKGROUND=".*"|GRUB_THEME="/boot/grub/themes/grub-theme/background.png"|' /etc/default/grub
-    sed -i 's|#GRUB_THEME=".*"|GRUB_THEME="/boot/grub/themes/grub-theme/theme.txt"|' /etc/default/grub
-
-    sed -i 's|#GRUB_SAVEDEFAULT|GRUB_SAVEDEFAULT|' /etc/default/grub
-    sed -i 's|#GRUB_DISABLE_OS_PROBER|GRUB_DISABLE_OS_PROBER|' /etc/default/grub
+    sed -i 's/GRUB_TIMEOUT=2/GRUB_TIMEOUT=1/' /etc/default/grub
+    echo "GRUB_THEME=\"/boot/grub/themes/grub-theme/background.png\"" >> /etc/default/grub
+    echo "GRUB_THEME=\"/boot/grub/themes/grub-theme/theme.txt\"" >> /etc/default/grub
+    echo "GRUB_SAVEDEFAULT=true" >> /etc/default/grub
+    echo "GRUB_DISABLE_OS_PROBER=false" >> /etc/default/grub
+    echo "loglevel=0" >> /etc/default/grub
 
     echo ">>> making grub config"
     grub-mkconfig -o /boot/grub/grub.cfg

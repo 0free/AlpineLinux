@@ -544,7 +544,7 @@ create_zfs() {
     zpool create -f -o ashift=12 -o autotrim=on -O recordsize=8192 \
     -O compression=lz4 -O acltype=posixacl \
     -O devices=off -O xattr=sa -O relatime=off -O atime=off \
-    -O dnodesize=legacy -O normalization=formD \
+    -O dnodesize=auto -O normalization=formD \
     -O canmount=noauto -O mountpoint=/ -R /mnt rpool $root_drive
     echo ">>> checking ZFS pool"
     zpool status
@@ -555,8 +555,6 @@ mount_root() {
 
     echo ">>> mounting root drive"
     if [[ $filesystem == 'zfs' ]]; then
-        echo ">>> exporting ZFS"
-        zpool export rpool
         echo ">>> importing ZFS"
         zpool import rpool -d $root_drive -R /mnt -N
         echo ">>> mounting ZFS dataset"
@@ -973,7 +971,6 @@ create_swap_file() {
 install_syslinux() {
 
     echo ">>> installing syslinux"
-    apk add syslinux
     dd bs=440 count=1 conv=notrunc if=/usr/share/syslinux/gptmbr.bin of=$drive
     mkdir -p /boot/extlinux/
     extlinux --install /boot/extlinux/

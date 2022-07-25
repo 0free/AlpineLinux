@@ -550,10 +550,7 @@ create_zfs() {
 
 mount_root() {
 
-    if [[ $filesystem == 'zfs' ]]; then
-        echo ">>> importing zpool"
-        zpool import rpool -d $root_drive -R /mnt
-    else
+    if [[ $filesystem != 'zfs' ]]; then
         echo ">>> mounting root drive"
         mount $root_drive /mnt
     fi
